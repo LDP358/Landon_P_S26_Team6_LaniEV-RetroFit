@@ -43,7 +43,7 @@ Parker Branson is a senior in Electrical Engineering and has an associate's degr
 
 ### Faculty Supervisor
 
-### Dr. Charles Van Neste
+#### Dr. Charles Van Neste
 
 | Field | Information |
 |------|-------------|
@@ -55,7 +55,7 @@ Parker Branson is a senior in Electrical Engineering and has an associate's degr
 
 ---
 
-### Research Areas and Interests
+#### Research Areas and Interests
 
 | Research Area |
 |---------------|
@@ -66,7 +66,7 @@ Parker Branson is a senior in Electrical Engineering and has an associate's degr
 
 ---
 
-### Educational Background
+#### Educational Background
 
 | Degree / Position | Institution | Year | Notes |
 |-------------------|------------|------|------|
