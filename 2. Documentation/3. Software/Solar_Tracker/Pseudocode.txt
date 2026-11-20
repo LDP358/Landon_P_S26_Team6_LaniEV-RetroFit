@@ -1,0 +1,44 @@
+Pseudocode for the Solar Panel Tracking System
+
+-- Begin Loop
+START                                                               
+Stop both actuators                         
+Set both to IDLE       
+
+
+--Read the North, East, South, and West sensors
+totalLight ← N + E + S + W
+
+
+--Calculate Errors
+northError ← (N − S) / (N + S + 1)
+westError  ← (W − E) / (W + E + 1)
+
+
+--Choose Which Way to Rotate Panel
+northCommand ← ChooseDirection(northError)
+westCommand  ← ChooseDirection(westError)
+
+
+--For Each Motor, Decide What to Do
+IF error > 0.07:       RETURN RETRACT
+ELSE IF error < −0.07: RETURN EXTEND
+ELSE:                  RETURN STOP
+
+
+--Check Commands and Light Level
+IF both commands are STOP OR totalLight < X:
+    Stop both actuators
+    Set state to IDLE
+    Continue to the next loop
+
+
+--Check if Tracking is Improving
+totalError ← absolute(northError) + absolute(westError)
+
+
+--Make Corrections
+SETTLING for 350 ms → Apply current commands → MOVING
+MOVING for 150 ms   → Stop both actuators   → SETTLING
+
+
