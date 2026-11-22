@@ -1,0 +1,352 @@
+[
+  {
+    "path": "GitHub Viewable/Actuator/Base_Cover.STL",
+    "bytes": 1225484,
+    "sha256": "a260e499216cca76c01c94e4cba24d526919931b7dd9cba5d6926dd20319070c"
+  },
+  {
+    "path": "GitHub Viewable/Actuator/Gasket.STL",
+    "bytes": 138184,
+    "sha256": "3ffa96318bc6e295c5f8aff761c69ba5a82f9a94ef85c7045a8cf8789eb093f9"
+  },
+  {
+    "path": "GitHub Viewable/Actuator/Hinge_Joint.STL",
+    "bytes": 321184,
+    "sha256": "5f079ecccda1c3e14eff5214f235dd70a85d0ae315b0893859c48b42c146da8f"
+  },
+  {
+    "path": "GitHub Viewable/Actuator/Hinge_Joint_Short.STL",
+    "bytes": 304084,
+    "sha256": "30ce8ac83fc80cb4558e8cffb3cc0753317bbdb0b8840b1c691306e469a45e3a"
+  },
+  {
+    "path": "GitHub Viewable/Actuator/Latch.STL",
+    "bytes": 226484,
+    "sha256": "ac8bd303891fe150db4a1c2ddbbdeb95d419a5c5b0d6972f789799db1d1cd2c9"
+  },
+  {
+    "path": "GitHub Viewable/Actuator/Linear_Actuator.STL",
+    "bytes": 4552434,
+    "sha256": "446bbd3e6ed6309d32a0d0cd8ce46a3fbd82ce360e64164b146191d53df9eb11"
+  },
+  {
+    "path": "GitHub Viewable/Actuator/Main_Case.STL",
+    "bytes": 922884,
+    "sha256": "b99f02c63b082217e9d815b2c10a4645bd320729c112da605fa3d2328e5e5804"
+  },
+  {
+    "path": "GitHub Viewable/Actuator/Nut.STL",
+    "bytes": 72984,
+    "sha256": "e8bfe199816e34102bd5f4adae7a182d32605c20274c21f74c3fc391713bcbb7"
+  },
+  {
+    "path": "GitHub Viewable/Actuator/Piston.STL",
+    "bytes": 57684,
+    "sha256": "d53ca366a2a96fce11baf7a6286927bc45d932d19fa107481beab910d0d47d39"
+  },
+  {
+    "path": "GitHub Viewable/Actuator/Piston_Cover.STL",
+    "bytes": 840484,
+    "sha256": "6d0f8d83cb4d46f432573252e93f7579bba907f52e4caeb4fd45017fd6fefb5d"
+  },
+  {
+    "path": "GitHub Viewable/Actuator/Screw.STL",
+    "bytes": 120184,
+    "sha256": "df21e4cac173e09c8f874980a7eda017200c062f726392c393166380718cd330"
+  },
+  {
+    "path": "GitHub Viewable/Actuator/Shaft_Case.STL",
+    "bytes": 230684,
+    "sha256": "36b285796e53297635b3887dcd2f4c7e97c965c0c8bf08e2996482e4caee3144"
+  },
+  {
+    "path": "GitHub Viewable/Actuator/Weird_Washer.STL",
+    "bytes": 92484,
+    "sha256": "5bb61a553fc22bac4018f509e1dfccc27f722e20b49ce4dd552fed8b0da7c351"
+  },
+  {
+    "path": "GitHub Viewable/Ball Joint/Ball_Joint.STL",
+    "bytes": 1633334,
+    "sha256": "02b9e258aa2125fd6002663745c630535868a4f4788d421adfcb12cca7463342"
+  },
+  {
+    "path": "GitHub Viewable/Ball Joint/BJ_Ball.STL",
+    "bytes": 549584,
+    "sha256": "88c8df4f679ebf196546fa2b0647cd738a26bdf4536d21d387c7502896766ba4"
+  },
+  {
+    "path": "GitHub Viewable/Ball Joint/BJ_Base.STL",
+    "bytes": 129784,
+    "sha256": "39cb7a70a00aac68644ebb9d64f9ab85497b4286aa8cd159001f8607456bebb1"
+  },
+  {
+    "path": "GitHub Viewable/Ball Joint/BJ_Nut.STL",
+    "bytes": 61484,
+    "sha256": "6ff98fa089c406ab0399ca34df7e4c28400cdac1e675d0c13e22a931e5606ba1"
+  },
+  {
+    "path": "GitHub Viewable/Ball Joint/BJ_Screw.STL",
+    "bytes": 86284,
+    "sha256": "70f4d7a3d95a36c432a9351661ab493e457c286187def77884db0b4489a2e752"
+  },
+  {
+    "path": "GitHub Viewable/Ball Joint/BJ_Shell.STL",
+    "bytes": 403184,
+    "sha256": "0e4f18c38417d48f3fc6632ac9114593dff0b599879a6ee33a304ac3116b1659"
+  },
+  {
+    "path": "GitHub Viewable/Cart Model/Golf Cart .png",
+    "bytes": 561213,
+    "sha256": "586c7d65e7c7e110c81471f1eec61afe6ca8ca5c1c5b1256c87d04cdea10d452"
+  },
+  {
+    "path": "GitHub Viewable/Cart Model/Golf Cart front.png",
+    "bytes": 126497,
+    "sha256": "f4766ba04883735873a14a511f78c68fd243ff1e8b0188f4f55c39ce656b9c25"
+  },
+  {
+    "path": "GitHub Viewable/Cart Model/Golf Cart with solar panel.step",
+    "bytes": 42484225,
+    "sha256": "272f05cb1838d3aae5a8e7e4813e55bb7cbf514c306fadf1286a895b6ced6837"
+  },
+  {
+    "path": "GitHub Viewable/Cart Model/Golf Cart.png",
+    "bytes": 442014,
+    "sha256": "79611e307c27efda5df593ef8756880e995dcc110882ea451bc1a6dbd87e6f6d"
+  },
+  {
+    "path": "GitHub Viewable/Frame Assemblies/Base_Frame.STL",
+    "bytes": 1451434,
+    "sha256": "0bab4efae12d6812372d92158df2b978c8b06a6813646ecaabc62eca15a4f231"
+  },
+  {
+    "path": "GitHub Viewable/Frame Assemblies/Composite-preview.stl",
+    "bytes": 4936884,
+    "sha256": "b8af60b9fcb0008df8c57fb77faeab44979b859c62b8dcb038dae8927bfcda8f"
+  },
+  {
+    "path": "GitHub Viewable/Frame Assemblies/Composite.STL",
+    "bytes": 13744784,
+    "sha256": "bb410cfa6d921765888ec09abf46e3027e48e081bf35768a23ff359a2a976970"
+  },
+  {
+    "path": "GitHub Viewable/Frame Assemblies/Panel_Frame.STL",
+    "bytes": 1415334,
+    "sha256": "870d2d451ca2186ad5d61d4f66510e9513ece8f25f6585abbbbf552978163c91"
+  },
+  {
+    "path": "GitHub Viewable/Frame Parts/Base_Frame_Side_Rail.STL",
+    "bytes": 48084,
+    "sha256": "be1380af6225dfc4e4a3c6127bd19b4ae18ed170db36339d6e584aa529718555"
+  },
+  {
+    "path": "GitHub Viewable/Frame Parts/Center_Strut.STL",
+    "bytes": 64684,
+    "sha256": "738bbe670cd54568067507055a3165e518d72b51fa2fb6f335a6dbc0523f43c9"
+  },
+  {
+    "path": "GitHub Viewable/Frame Parts/Clevis_Bracket.STL",
+    "bytes": 39484,
+    "sha256": "f4c8ad34a9a64265489ec42bb8394f682f0bafd84461f8890d24994c1385d8e4"
+  },
+  {
+    "path": "GitHub Viewable/Frame Parts/Crossbars.STL",
+    "bytes": 2484,
+    "sha256": "bbe04375bbc19ba8b7f01fb216124be7f3b9a2b142234eba1e84fe032bcf5d99"
+  },
+  {
+    "path": "GitHub Viewable/Frame Parts/Front&Back.STL",
+    "bytes": 243884,
+    "sha256": "e1b8b615bac04939224d8043f48826a50b8e8c1c63a4c24c33dcc40cca4d76aa"
+  },
+  {
+    "path": "GitHub Viewable/Frame Parts/Panel_Frame_Side_Rail.STL",
+    "bytes": 70284,
+    "sha256": "6314019b37e22e048e4c7cb67f89e5ac163113cc2e3a59fc81f9947d427913fd"
+  },
+  {
+    "path": "GitHub Viewable/Frame Parts/Side2Front_Bracket.STL",
+    "bytes": 229884,
+    "sha256": "a6cbdad148b7df34832233a39e44293954885e7cb49ea41175c24f6da752cfd1"
+  },
+  {
+    "path": "images/tracking-frame-front.png",
+    "bytes": 193745,
+    "sha256": "4fcf2bd0cb5ff71f8c89e0de462108016c106cd73cc671da8dabcdc6f7ce99fc"
+  },
+  {
+    "path": "images/tracking-frame-isometric.png",
+    "bytes": 1092600,
+    "sha256": "847024e6de144402de74aa381185eaec3bb99b659511348e15158fe0413f739f"
+  },
+  {
+    "path": "README.md",
+    "bytes": 3110,
+    "sha256": "e91059a58711c8a3db0f643e7835adecc0305e85a104bbba80a336bbdeb101f6"
+  },
+  {
+    "path": "SolidWorks Accessable/Actuator/Base_Cover.sldprt",
+    "bytes": 412224,
+    "sha256": "2a33f27b1c455682aeec9ac9119e4f2cd84f0a8684016146ec33d532c9bd9da7"
+  },
+  {
+    "path": "SolidWorks Accessable/Actuator/Gasket.sldprt",
+    "bytes": 149712,
+    "sha256": "769adce5edb6763dfd841c076325509c7ae2d4e4de5f97aee412afacc8a3e3b9"
+  },
+  {
+    "path": "SolidWorks Accessable/Actuator/Hinge_Joint.sldprt",
+    "bytes": 215381,
+    "sha256": "9363aa2ddb3c5decdd3fe3ca3d0a95c67201e908147a5553b62b28fbd91a3512"
+  },
+  {
+    "path": "SolidWorks Accessable/Actuator/Hinge_Joint_Short.sldprt",
+    "bytes": 469447,
+    "sha256": "5a02c0f55cc34deaaac196df7e8ec5face7bb6c7a3cef4bc86c4244d8a6fcab2"
+  },
+  {
+    "path": "SolidWorks Accessable/Actuator/Latch.sldprt",
+    "bytes": 411252,
+    "sha256": "86d529b9f5bc386263cd831f21359ef640fd44205bf2232af26e9232527d7470"
+  },
+  {
+    "path": "SolidWorks Accessable/Actuator/Linear_Actuator.sldasm",
+    "bytes": 815981,
+    "sha256": "588cb6691fe3fa581d280dbc8023b4720958f6a95e052d60649c2f4465d87b53"
+  },
+  {
+    "path": "SolidWorks Accessable/Actuator/Main_Case.sldprt",
+    "bytes": 488313,
+    "sha256": "75ec30f8507456328690af215231c4072bad9f71f3d50f177c64cae79a6640ba"
+  },
+  {
+    "path": "SolidWorks Accessable/Actuator/Nut.sldprt",
+    "bytes": 110857,
+    "sha256": "c23e4e89d713a1700c5f6b3f01df023a97657d291b423781c7ff3f9f03ea582a"
+  },
+  {
+    "path": "SolidWorks Accessable/Actuator/Piston.sldprt",
+    "bytes": 111348,
+    "sha256": "a21a2f840d9cc921c8490cdcfe1eab12a6d8730ae5b641b5970ebbead849286f"
+  },
+  {
+    "path": "SolidWorks Accessable/Actuator/Piston_Cover.sldprt",
+    "bytes": 314824,
+    "sha256": "839accff6ba7407db5085385d194799cdd0e7506bb11d4e81a211b83332269ec"
+  },
+  {
+    "path": "SolidWorks Accessable/Actuator/Screw.sldprt",
+    "bytes": 117640,
+    "sha256": "9b8a7e9f33e59b0c2f9ae4cf3bfd45a97638e3904458d8ee5068ecfc2ff151eb"
+  },
+  {
+    "path": "SolidWorks Accessable/Actuator/Shaft_Case.sldprt",
+    "bytes": 294351,
+    "sha256": "c6b4d5749f1ecd42c40f124a79ef313e9e7e2cc9628615cdd4a5c5bcef4a48f8"
+  },
+  {
+    "path": "SolidWorks Accessable/Actuator/Weird_Washer.sldprt",
+    "bytes": 149155,
+    "sha256": "fa5b830ada6216eb6fa1b1e39a40d20f547c1353957e1a95e0c963e9536b258a"
+  },
+  {
+    "path": "SolidWorks Accessable/Ball Joint/Ball_Joint.sldasm",
+    "bytes": 261372,
+    "sha256": "f04b252d8da02329d6583330937eb6e8b77f0966cc893a762c616a2abd31a482"
+  },
+  {
+    "path": "SolidWorks Accessable/Ball Joint/BJ_Ball.sldprt",
+    "bytes": 215136,
+    "sha256": "af1f0fc0054f36ecec1e782b3beec257705e1943798650805e6ce576e08b08f1"
+  },
+  {
+    "path": "SolidWorks Accessable/Ball Joint/BJ_Base.sldprt",
+    "bytes": 161941,
+    "sha256": "1c3a70dde5d703749512c5dbc8d9921ae44c56a5e98317ef27a1ecf306b29f3d"
+  },
+  {
+    "path": "SolidWorks Accessable/Ball Joint/BJ_Nut.sldprt",
+    "bytes": 101462,
+    "sha256": "494791eb5c05b2c2900114ce0f7d2749d63138ebac521228c1367ac19bfa292c"
+  },
+  {
+    "path": "SolidWorks Accessable/Ball Joint/BJ_Screw.sldprt",
+    "bytes": 68863,
+    "sha256": "9ef52c4b11e32d85c8ab7be395be4824c4d0a5f4af505e30270ab1996081c543"
+  },
+  {
+    "path": "SolidWorks Accessable/Ball Joint/BJ_Shell.sldprt",
+    "bytes": 269554,
+    "sha256": "888ca1cd34fc12cac2e19c449bcce22db95b90f03cf0503b78603d0f7f3273c1"
+  },
+  {
+    "path": "SolidWorks Accessable/Cart Model/Golf Cart .png",
+    "bytes": 561213,
+    "sha256": "586c7d65e7c7e110c81471f1eec61afe6ca8ca5c1c5b1256c87d04cdea10d452"
+  },
+  {
+    "path": "SolidWorks Accessable/Cart Model/Golf Cart front.png",
+    "bytes": 126497,
+    "sha256": "f4766ba04883735873a14a511f78c68fd243ff1e8b0188f4f55c39ce656b9c25"
+  },
+  {
+    "path": "SolidWorks Accessable/Cart Model/Golf Cart with solar panel.step",
+    "bytes": 42484225,
+    "sha256": "272f05cb1838d3aae5a8e7e4813e55bb7cbf514c306fadf1286a895b6ced6837"
+  },
+  {
+    "path": "SolidWorks Accessable/Cart Model/Golf Cart.png",
+    "bytes": 442014,
+    "sha256": "79611e307c27efda5df593ef8756880e995dcc110882ea451bc1a6dbd87e6f6d"
+  },
+  {
+    "path": "SolidWorks Accessable/Frame Assemblies/Base_Frame.SLDASM",
+    "bytes": 201240,
+    "sha256": "da5e9b3c5c21c1aa1b86bdcf4184694f4cecbac23aaa16566dbc8a9ff0d8b055"
+  },
+  {
+    "path": "SolidWorks Accessable/Frame Assemblies/Composite.SLDASM",
+    "bytes": 1619987,
+    "sha256": "8a324bfb2b2098135c500cd3a631bc83ce8dcbc00ca2895a8355bb086b3b6166"
+  },
+  {
+    "path": "SolidWorks Accessable/Frame Assemblies/Panel_Frame.SLDASM",
+    "bytes": 238885,
+    "sha256": "0967867414a4c163f79760bdcc86995334007fd42b0b19d38847cbc7d2f4c6a2"
+  },
+  {
+    "path": "SolidWorks Accessable/Frame Parts/Base_Frame_Side_Rail.SLDPRT",
+    "bytes": 98021,
+    "sha256": "cacb1a0a8c89c34adeec6b72c082eb45e9c4212146fb515f894c3cf0302a4f78"
+  },
+  {
+    "path": "SolidWorks Accessable/Frame Parts/Center_Strut.SLDPRT",
+    "bytes": 90835,
+    "sha256": "1bfd94d36c42c8e06d926aedc754a3aff3856eb0b0001ab04ea94b1a0d3ec071"
+  },
+  {
+    "path": "SolidWorks Accessable/Frame Parts/Clevis_Bracket.SLDPRT",
+    "bytes": 131756,
+    "sha256": "9fb1154c0541b68f1a4bfaa017fb6eb030cf683ace830478e75ba90097601e9a"
+  },
+  {
+    "path": "SolidWorks Accessable/Frame Parts/Crossbars.SLDPRT",
+    "bytes": 62387,
+    "sha256": "add8aa1422bcf1fbb7112abc473f7e70b5b5c3e3823e9012a7315339f636175d"
+  },
+  {
+    "path": "SolidWorks Accessable/Frame Parts/Front&Back.SLDPRT",
+    "bytes": 152202,
+    "sha256": "423c84f21c9a89d9ac7db926ffd688e9566c68ac9fa854f0519068b680b25a13"
+  },
+  {
+    "path": "SolidWorks Accessable/Frame Parts/Panel_Frame_Side_Rail.SLDPRT",
+    "bytes": 177318,
+    "sha256": "6db872312a9cfa8f7dbf1ccdc86e365ea411066ebcfeb8bf765d7dfd9c6e992d"
+  },
+  {
+    "path": "SolidWorks Accessable/Frame Parts/Side2Front_Bracket.SLDPRT",
+    "bytes": 197530,
+    "sha256": "5f7f2c01b7a5ada88d1f0884bfb13f667ce8882524080b85959fc377eea99fd7"
+  }
+]
