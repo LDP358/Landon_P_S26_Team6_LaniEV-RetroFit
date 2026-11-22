@@ -1,4 +1,6 @@
 function x_sensor_tracker_demo()
+%X_SENSOR_TRACKER_DEMO Interactive 3D digital twin of X-sensor solar tracker.
+%
 % Run in MATLAB Command Window:
 %     x_sensor_tracker_demo
 %
@@ -6,7 +8,11 @@ function x_sensor_tracker_demo()
 % Sun may be at most 30 degrees from directly overhead in ANY direction.
 % Press RUN, STEP, PAUSE, or RESET. Change sun inputs while running.
 % The controller sees ONLY the four simulated sunlight sensor readings.
-
+%
+% Requires BASE MATLAB and x_sensor_core.m + tracker_config.m in folder.
+% v2.1: N/W actuators mounted on BOTH fixed and moving frame outer edge
+% midpoints; modeled compact actuators are virtual, not selected hardware.
+% This is a preliminary kinematic demonstration, not hardware validation.
 
 % Explicit high-contrast UI colors. MATLAB/Windows dark themes can otherwise
 % render near-white top controls on a nearly white figure background.
@@ -21,13 +27,21 @@ uiRunBg=[.75 .91 .80];
 maxSunOffsetFromZenithDeg=30;
 minSunElevationDeg=90-maxSunOffsetFromZenithDeg;
 
+% RUN DURATION: change this one value to set the simulation time limit.
+% Each controller step adds cfg.demoDtSeconds (0.20 s by default).
+% For example, 15, 30, or 60 seconds. This is SIMULATED time, not wall time.
+maxSimSeconds = 30;
+
+% Real-world spacing between visual updates. Larger = slower animation.
+uiTickPeriodSeconds = 0.12;
+
 cfg=x_sensor_core('config');
 st=x_sensor_core('init',cfg);
 initialAz=315;
 initialEl=82;
 st.sensor=x_sensor_core('sense',st.angles,initialAz,initialEl,cfg);
 
-fig=figure('Name','Solar Tracker | X-shaped 4-sensor digital twin', ...
+fig=figure('Name','Solar Tracker | X-sensor, VIRTUAL edge-mounted actuators', ...
     'NumberTitle','off','Color',uiBg, ...
     'Position',[70 65 1330 820],'MenuBar','none', ...
     'ToolBar','figure','CloseRequestFcn',@closeDemo);
@@ -101,16 +115,16 @@ hExport=uicontrol(fig,'Style','pushbutton','Units','normalized', ...
     'BackgroundColor',uiButtonBg,'ForegroundColor',uiText, ...
     'FontWeight','bold');
 hStatus=uicontrol(fig,'Style','text','Units','normalized', ...
-    'Position',[.510 .862 .47 .080], ...
+    'Position',[.510 .824 .47 .111], ...
     'String','Ready - press RUN','HorizontalAlignment','left', ...
     'BackgroundColor',uiStatusBg,'ForegroundColor',uiText, ...
-    'FontSize',10,'FontWeight','bold');
+    'FontSize',9,'FontWeight','bold');
 
 % ------------------------------------------------------------------
-% 3D physical scene: top and lower frames, center ball, two actuators.
+% 3D scene: centered N/W actuators, hinged S/E support arms, center ball.
 % ------------------------------------------------------------------
 ax3=axes('Parent',fig,'Units','normalized', ...
-    'Position',[.037 .275 .558 .582]);
+    'Position',[.037 .275 .558 .550]);
 hold(ax3,'on'); grid(ax3,'on');
 axis(ax3,[-50 50 -65 65 -5 69]); axis(ax3,'vis3d');
 view(ax3,-38,25);
@@ -118,14 +132,15 @@ set(ax3,'XDir','normal','YDir','normal');
 xlabel(ax3,'East / West (in)');
 ylabel(ax3,'North / South (in)');
 zlabel(ax3,'Height (in)');
-title(ax3,'Moving upper frame (blue) and fixed lower frame (gray)');
+title(ax3,'Outer-rim N/W mounts | virtual actuators | S/E elbows');
 baseX=[-22 22 22 -22]*.0254;
 baseY=[-36 -36 36 36]*.0254;
 baseZ=zeros(1,4);
 patch(ax3,baseX/.0254,baseY/.0254,baseZ, ...
     [.63 .68 .75],'FaceAlpha',.08,'EdgeColor',[.37 .43 .50], ...
     'LineWidth',2.3);
-
+% Actuator lower pins mount directly at N/W midpoints of the perimeter.
+% No interior cross-bracing is drawn or required by this IDEALIZED layout.
 hTop=patch(ax3,nan(1,4),nan(1,4),nan(1,4),[.18 .47 .85], ...
     'FaceAlpha',.48,'EdgeColor',[.05 .22 .53],'LineWidth',2.2);
 hBall=scatter3(ax3,0,0,6,115,[.98 .73 .16],'filled', ...
@@ -142,6 +157,24 @@ for i=1:2
         'MarkerFaceColor',colors{i},'MarkerSize',7);
     hActTip(i)=plot3(ax3,nan,nan,nan,'o','Color',colors{i}, ...
         'MarkerFaceColor',colors{i},'MarkerSize',7);
+end
+% Opposite-edge, double-link elbow supports: South (violet), East (red).
+% Each support is rendered with two rigid links and a moving central hinge.
+elbowColors={[.62 .33 .80],[.86 .28 .34]};
+hElbowLower=gobjects(2,1);hElbowUpper=gobjects(2,1);
+hElbowKnee=gobjects(2,1);hElbowAnchor=gobjects(2,1);
+for ii=1:2
+    c=elbowColors{ii};
+    hElbowLower(ii)=plot3(ax3,nan,nan,nan,'-', ...
+        'LineWidth',4,'Color',c);
+    hElbowUpper(ii)=plot3(ax3,nan,nan,nan,'-', ...
+        'LineWidth',4,'Color',c);
+    hElbowKnee(ii)=plot3(ax3,nan,nan,nan,'o', ...
+        'MarkerFaceColor',c,'MarkerEdgeColor',[.15 .15 .2], ...
+        'MarkerSize',8);
+    hElbowAnchor(ii)=plot3(ax3,nan,nan,nan,'s', ...
+        'MarkerFaceColor',c,'MarkerEdgeColor',[.15 .15 .2], ...
+        'MarkerSize',6);
 end
 hNormal=quiver3(ax3,0,0,0,0,0,1,0,'Color',[.09 .34 .73], ...
     'LineWidth',2,'MaxHeadSize',.8);
@@ -162,7 +195,7 @@ text(ax3,43,-36,0,'E','FontWeight','bold');
 % Top-right: actual geometry of diagonal walls and sensor patch colors.
 % ------------------------------------------------------------------
 axSensor=axes('Parent',fig,'Units','normalized', ...
-    'Position',[.672 .575 .288 .264]);
+    'Position',[.672 .560 .288 .255]);
 hold(axSensor,'on'); axis(axSensor,'equal');
 axis(axSensor,[-.08 .08 -.117 .117]);
 set(axSensor,'XTick',[],'YTick',[],'Box','on');
@@ -198,24 +231,60 @@ end
 
 % Four sensor readings as bars with consistent N/E/S/W ordering.
 axBars=axes('Parent',fig,'Units','normalized', ...
-    'Position',[.665 .295 .295 .219]);
+    'Position',[.665 .295 .295 .214]);
 hBars=bar(axBars,1:4,zeros(1,4),.66,'FaceColor',[.95 .72 .12]);
 set(axBars,'XTick',1:4,'XTickLabel',labels);
 ylim(axBars,[0 1000]);ylabel(axBars,'Simulated signal','Color',uiText);
 title(axBars,'Photocell measurements','Color',uiText,'FontWeight','bold');grid(axBars,'on');
 
-% Time history of sensing errors. Both should trend toward 0.
+% Bottom row of three time histories: sensor errors, actuator FORCE,
+% and assumed STEP-AVERAGED CURRENT, with hypothetical start transients.
+% Peak samples are dotted (not measured sensor values).
 axHistory=axes('Parent',fig,'Units','normalized', ...
-    'Position',[.09 .081 .825 .145]);
+    'Position',[.055 .086 .252 .135]);
 hNS=plot(axHistory,0,0,'-','Color',[.04 .55 .47], ...
-    'LineWidth',1.9);hold(axHistory,'on');
+    'LineWidth',1.6);hold(axHistory,'on');
 hEW=plot(axHistory,0,0,'-','Color',[.88 .49 .10], ...
-    'LineWidth',1.9);
-plot(axHistory,[0 60],[0 0],':','Color',[.35 .38 .42]);
-xlabel(axHistory,'Simulation time (s)','Color',uiText);
+    'LineWidth',1.6);
+xlabel(axHistory,'Time (s)','Color',uiText);
 ylabel(axHistory,'Error','Color',uiText);
-legend(axHistory,{'N-S','W-E'},'Location','northeast','Orientation','horizontal');
+title(axHistory,'Sensor imbalance','Color',uiText);
+legend(axHistory,{'N-S','W-E'},'Location','northeast','FontSize',7);
 grid(axHistory,'on');
+
+axForce=axes('Parent',fig,'Units','normalized', ...
+    'Position',[.391 .086 .235 .135]);
+hForceN=plot(axForce,0,0,'-','Color',[.04 .55 .47], ...
+    'LineWidth',1.7);hold(axForce,'on');
+hForceW=plot(axForce,0,0,'-','Color',[.88 .49 .10], ...
+    'LineWidth',1.7);
+xlabel(axForce,'Time (s)','Color',uiText);
+ylabel(axForce,'Axial force (lbf)','Color',uiText);
+title(axForce,'Gravity-only force (signed)','Color',uiText);
+legend(axForce,{'North','West'},'Location','northeast','FontSize',7);
+grid(axForce,'on');
+
+axCurrent=axes('Parent',fig,'Units','normalized', ...
+    'Position',[.719 .086 .236 .135]);
+hCurrentN=plot(axCurrent,0,0,'-','Color',[.04 .55 .47], ...
+    'LineWidth',1.7);hold(axCurrent,'on');
+hCurrentW=plot(axCurrent,0,0,'-','Color',[.88 .49 .10], ...
+    'LineWidth',1.7);
+hCurrentNPeak=plot(axCurrent,0,0,':','Color',[.04 .55 .47], ...
+    'LineWidth',1.0);
+hCurrentWPeak=plot(axCurrent,0,0,':','Color',[.88 .49 .10], ...
+    'LineWidth',1.0);
+xlabel(axCurrent,'Time (s)','Color',uiText);
+ylabel(axCurrent,'Motor current (A)','Color',uiText);
+title(axCurrent,'Assumed current: mean + peak','Color',uiText);
+legend(axCurrent,{'N mean','W mean','N peak','W peak'}, ...
+    'Location','northeast','FontSize',6);
+grid(axCurrent,'on');
+
+% One short timer callback per controller step. Unlike a blocking while
+% loop, this allows the PAUSE/RESET buttons to run between steps.
+simTimer = timer('ExecutionMode','fixedSpacing', ...
+    'Period',uiTickPeriodSeconds,'TimerFcn',@runTick);
 
 updateDisplay();
 
@@ -255,32 +324,82 @@ updateDisplay();
     end
 
     function runDemo(~,~)
-        if ~ishandle(fig)||getappdata(fig,'running'),return;end
+        if ~ishandle(fig) || getappdata(fig,'running'), return; end
+        s = getappdata(fig,'state');
+        if s.t >= maxSimSeconds-1e-9
+            set(hStatus,'String',sprintf( ...
+                'Time limit reached (%.1f simulated s). Press RESET to run again.',maxSimSeconds));
+            return;
+        end
         setappdata(fig,'running',true);
         set(hRun,'String','RUNNING','BackgroundColor',uiButtonBg);
-        while ishandle(fig) && getappdata(fig,'running')
+        try
+            start(simTimer);
+        catch ME
+            setappdata(fig,'running',false);
+            set(hRun,'String','RUN / RESUME','BackgroundColor',uiRunBg);
+            set(hStatus,'String',sprintf('Unable to start simulation: %s', ME.message));
+        end
+    end
+
+    function runTick(~,~)
+        if ~ishandle(fig) || ~getappdata(fig,'running'), return; end
+        try
+            s = getappdata(fig,'state');
+            if s.t >= maxSimSeconds-1e-9
+                stopRun(sprintf('Time limit reached (%.1f simulated s). Press RESET to run again.',maxSimSeconds));
+                return;
+            end
             advance();
             drawnow limitrate;
-            pause(.045);  % deliberate visible movement; controls stay responsive
+            s = getappdata(fig,'state');
+            if s.t >= maxSimSeconds-1e-9
+                stopRun(sprintf('Time limit reached (%.1f simulated s). Press RESET to run again.',maxSimSeconds));
+            end
+        catch ME
+            stopRun(sprintf('Simulation stopped: %s',ME.message));
+            warning('XSensorTwin:RunError','%s',getReport(ME,'basic'));
         end
-        if ishandle(fig)
-            set(hRun,'String','RUN / RESUME','BackgroundColor',uiRunBg);
+    end
+
+    function stopRun(reason)
+        if ~ishandle(fig), return; end
+        setappdata(fig,'running',false);
+        if isvalid(simTimer) && strcmp(simTimer.Running,'on')
+            stop(simTimer);
+        end
+        set(hRun,'String','RUN / RESUME','BackgroundColor',uiRunBg);
+        if nargin>0 && ~isempty(reason)
+            set(hStatus,'String',reason);
         end
     end
 
     function pauseDemo(~,~)
-        if ishandle(fig),setappdata(fig,'running',false);end
+        if ishandle(fig)
+            s = getappdata(fig,'state');
+            stopRun(sprintf('Paused at %.1f simulated s. Press RUN to resume.',s.t));
+        end
     end
 
     function oneStep(~,~)
-        if ~getappdata(fig,'running')
-            advance();
-            drawnow;
+        if ~ishandle(fig) || getappdata(fig,'running'), return; end
+        s = getappdata(fig,'state');
+        if s.t >= maxSimSeconds-1e-9
+            set(hStatus,'String',sprintf( ...
+                'Time limit reached (%.1f simulated s). Press RESET to run again.',maxSimSeconds));
+            return;
+        end
+        advance();
+        drawnow;
+        s = getappdata(fig,'state');
+        if s.t >= maxSimSeconds-1e-9
+            set(hStatus,'String',sprintf( ...
+                'Time limit reached (%.1f simulated s). Press RESET to run again.',maxSimSeconds));
         end
     end
 
     function resetDemo(~,~)
-        setappdata(fig,'running',false);
+        stopRun('');
         newSt=x_sensor_core('init',cfg);
         setappdata(fig,'state',newSt);
         updateDisplay();
@@ -296,10 +415,24 @@ updateDisplay();
             h.errorNS(:),h.errorEW(:),h.pitch(:),h.roll(:), ...
             h.northLengthIn(:),h.westLengthIn(:),h.align(:), ...
             h.sunAzDeg(:),h.sunElevDeg(:), ...
+            h.northForceLbf(:),h.westForceLbf(:), ...
+            h.northCurrentA(:),h.westCurrentA(:), ...
+            h.northCurrentPeakA(:),h.westCurrentPeakA(:), ...
+            h.northLoadAddedMilliA(:),h.westLoadAddedMilliA(:), ...
+            h.northStartAddedA(:),h.westStartAddedA(:), ...
+            h.northMotorDuty(:),h.westMotorDuty(:), ...
+            h.batteryEnergyWh(:),h.yawResidualNm(:), ...
             'VariableNames',{'timeSec','sensorN','sensorE','sensorS', ...
             'sensorW','errorNS','errorWE','northEdgeUpDeg', ...
             'westEdgeUpDeg','northActuatorLengthIn','westActuatorLengthIn', ...
-            'truePointingErrorDeg','sunAzimuthDeg','sunElevationDeg'});
+            'truePointingErrorDeg','sunAzimuthDeg','sunElevationDeg', ...
+            'northAxialForceLbf','westAxialForceLbf', ...
+            'northStepAverageCurrentA','westStepAverageCurrentA', ...
+            'northIllustrativePeakA','westIllustrativePeakA', ...
+            'northGravityLoadAddedMilliA','westGravityLoadAddedMilliA', ...
+            'northStartupAddedAvgA','westStartupAddedAvgA', ...
+            'northMotionDuty','westMotionDuty', ...
+            'estimatedBatteryEnergyWh','unbalancedYawMomentNm'});
         writetable(T,fullfile(p,f));
         fprintf('Saved %d samples to %s\n',height(T),fullfile(p,f));
         fprintf('Current display sun: azimuth %.1f deg, elevation %.1f deg\n',az,el);
@@ -307,13 +440,19 @@ updateDisplay();
 
     function closeDemo(~,~)
         setappdata(fig,'running',false);
+        if isvalid(simTimer)
+            if strcmp(simTimer.Running,'on'), stop(simTimer); end
+            delete(simTimer);
+        end
         delete(fig);
     end
 
     function advance()
         [az,el]=currentSun();
         old=getappdata(fig,'state');
-        newSt=x_sensor_core('step',old,cfg,az,el,cfg.demoDtSeconds);
+        dt=min(cfg.demoDtSeconds,maxSimSeconds-old.t);
+        if dt <= 1e-9, return; end
+        newSt=x_sensor_core('step',old,cfg,az,el,dt);
         setappdata(fig,'state',newSt);
         updateDisplay();
     end
@@ -348,6 +487,18 @@ updateDisplay();
             set(hActTip(ii),'XData',to(1)/.0254, ...
                 'YData',to(2)/.0254,'ZData',to(3)/.0254);
         end
+        [elbowPoints,~]=x_sensor_core('elbows',s.angles,cfg);
+        for ii=1:2
+            pointsIn=elbowPoints(:,:,ii)/.0254;
+            set(hElbowLower(ii),'XData',pointsIn(1,1:2), ...
+                'YData',pointsIn(2,1:2),'ZData',pointsIn(3,1:2));
+            set(hElbowUpper(ii),'XData',pointsIn(1,2:3), ...
+                'YData',pointsIn(2,2:3),'ZData',pointsIn(3,2:3));
+            set(hElbowKnee(ii),'XData',pointsIn(1,2), ...
+                'YData',pointsIn(2,2),'ZData',pointsIn(3,2));
+            set(hElbowAnchor(ii),'XData',pointsIn(1,[1 3]), ...
+                'YData',pointsIn(2,[1 3]),'ZData',pointsIn(3,[1 3]));
+        end
         cIn=center/.0254;
         normal=R*[0;0;1];
         sun=x_sensor_core('sunvec',az,el);
@@ -374,21 +525,43 @@ updateDisplay();
         set(hBars,'YData',m.raw(:).');
         set(hNS,'XData',s.hist.t,'YData',s.hist.errorNS);
         set(hEW,'XData',s.hist.t,'YData',s.hist.errorEW);
+        set(hForceN,'XData',s.hist.t,'YData',s.hist.northForceLbf);
+        set(hForceW,'XData',s.hist.t,'YData',s.hist.westForceLbf);
+        set(hCurrentN,'XData',s.hist.t,'YData',s.hist.northCurrentA);
+        set(hCurrentW,'XData',s.hist.t,'YData',s.hist.westCurrentA);
+        set(hCurrentNPeak,'XData',s.hist.t,'YData',s.hist.northCurrentPeakA);
+        set(hCurrentWPeak,'XData',s.hist.t,'YData',s.hist.westCurrentPeakA);
         if s.t>0
             xlim(axHistory,[max(0,s.t-80),max(25,s.t+3)]);
         else
             xlim(axHistory,[0 25]);
         end
+        xlim(axForce,xlim(axHistory));
+        xlim(axCurrent,xlim(axHistory));
+        fmax=max(0.5,max(abs([s.hist.northForceLbf(:);s.hist.westForceLbf(:)])));
+        ylim(axForce,[-1.2*fmax,1.2*fmax]);
+        imax=max(0.25,max([s.hist.northCurrentA(:); ...
+                           s.hist.westCurrentA(:); ...
+                           s.hist.northCurrentPeakA(:); ...
+                           s.hist.westCurrentPeakA(:)]));
+        ylim(axCurrent,[0,1.20*imax]);
         ylim(axHistory,[-1 1]);
         errNow=acosd(max(-1,min(1,dot(normal,sun))));
         title(ax3,sprintf('Sun: %.0f deg az, %.0f deg elev | Panel error: %.1f deg', ...
             az,el,errNow),'Color',uiText,'FontWeight','bold');
         currentL=s.lengths/.0254;
         mode=s.mode;
-        status={sprintf('%s | Sim %.1f s',mode,s.t), ...
+        status={sprintf('%s | Sim %.1f s | PITCH/ROLL LIMIT: +/-8 deg',mode,s.t), ...
             sprintf('Tilt: pitch %.2f deg, roll %.2f deg | Actuators N %.2f in, W %.2f in', ...
                 rad2deg(s.angles(1)),rad2deg(s.angles(2)),currentL(1),currentL(2)), ...
-            sprintf('Sensor errors: N-S %+.3f, W-E %+.3f',m.error(1),m.error(2))};
+            sprintf('Sensor errors: N-S %+.3f, W-E %+.3f',m.error(1),m.error(2)), ...
+            sprintf('Gravity axial forces: North %+.2f lbf | West %+.2f lbf', ...
+                s.load.forceLbf(1),s.load.forceLbf(2)), ...
+            sprintf('Assumed mean current: North %.3f A | West %.3f A', ...
+                s.currentA(1),s.currentA(2)), ...
+            sprintf('Load add: N %.1f mA, W %.1f mA | Battery energy %.5f Wh', ...
+                1000*s.loadCurrentContributionA(1), ...
+                1000*s.loadCurrentContributionA(2),s.batteryEnergyWh)};
         set(hStatus,'String',status);
         % 'True pointing error' is display-only: the feedback controller
         % NEVER uses this diagnostic to command any actuator.

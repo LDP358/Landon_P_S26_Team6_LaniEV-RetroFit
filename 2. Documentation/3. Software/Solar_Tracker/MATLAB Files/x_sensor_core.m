@@ -9,9 +9,14 @@ function varargout = x_sensor_core(action, varargin)
 % sense = x_sensor_core('sense', anglesRadians, azDeg, elevDeg, cfg);
 % th    = x_sensor_core('fromlengths', Lmeters, guessRadians, cfg);
 % L     = x_sensor_core('lengths', thRadians, cfg);
+% load   = x_sensor_core('forces', thRadians, cfg);
+% [P,ok] = x_sensor_core('elbows', thRadians, cfg);
+% P is 3x3x2: [lower anchor, elbow hinge, upper anchor] for each support.
 %
 % Safety: mechanical yaw, linkages, wind, force, physical sensing,
 % backdriving and electrical drivers are not verified in this demo.
+% v1.9 uses IDEALIZED short actuators at the outside rim midpoints; their
+% pin-to-pin ranges are geometric requirements, not product specifications.
 
 switch lower(action)
     case 'config'
@@ -30,8 +35,8 @@ switch lower(action)
         cfg.controllerGainDeg = 2.0;     % angle nudge per normalized error
         cfg.demoDtSeconds = 0.20;
         cfg.sensorLowLight = 100;
-        cfg.maxPitchDeg = 10;
-        cfg.maxRollDeg = 10;
+        % Mechanical angle limits are set in tracker_config.m; do NOT
+        % overwrite them here (the previous version did this).
         varargout{1} = cfg;
     case 'init'
         cfg = varargin{1};
@@ -46,6 +51,15 @@ switch lower(action)
         st.minCornerM = cornerClearance(st.angles,cfg);
         st.pointingErrorDeg = NaN;
         st.totalMotorSeconds = [0;0];
+        st.load = staticLoads(st.angles,cfg);
+        st.currentA = cfg.assumedHoldCurrentA;  % STEP-AVERAGE amps
+        st.peakCurrentA = st.currentA;          % illustrative short peaks
+        st.loadCurrentContributionA = [0;0];    % step-averaged force-related part
+        st.startCurrentContributionA = [0;0];   % startup transient averaged
+        st.movementDuty = [0;0];               % fraction energized per dt
+        st.wasContinuouslyRunning = false(2,1);
+        st.previousDirection = [0;0];
+        st.batteryEnergyWh = 0;    % accumulated illustrative DC battery energy
         st.hist.t = 0;
         st.hist.errorNS = st.sensor.error(1);
         st.hist.errorEW = st.sensor.error(2);
@@ -60,6 +74,20 @@ switch lower(action)
         st.hist.westLengthIn = st.lengths(2)/0.0254;
         st.hist.sunAzDeg = NaN;
         st.hist.sunElevDeg = NaN;
+        st.hist.northForceLbf = st.load.forceLbf(1);
+        st.hist.westForceLbf = st.load.forceLbf(2);
+        st.hist.northCurrentA = st.currentA(1);
+        st.hist.westCurrentA = st.currentA(2);
+        st.hist.northLoadAddedMilliA = 0;
+        st.hist.westLoadAddedMilliA = 0;
+        st.hist.northStartAddedA = 0;
+        st.hist.westStartAddedA = 0;
+        st.hist.northCurrentPeakA = st.currentA(1);
+        st.hist.westCurrentPeakA = st.currentA(2);
+        st.hist.northMotorDuty = 0;
+        st.hist.westMotorDuty = 0;
+        st.hist.batteryEnergyWh = 0;
+        st.hist.yawResidualNm = st.load.residualMomentNm(3);
         varargout{1} = st;
     case 'step'
         varargout{1} = step(varargin{:});
@@ -77,6 +105,10 @@ switch lower(action)
         varargout{1} = cornerClearance(varargin{:});
     case 'safe'
         varargout{1} = safePose(varargin{:});
+    case 'forces'
+        varargout{1} = staticLoads(varargin{:});
+    case 'elbows'
+        [varargout{1}, varargout{2}] = elbowGeometry(varargin{:});
     case 'steer' % returns desired tilt using SENSOR READINGS only
         varargout{1} = steer(varargin{:});
     otherwise
@@ -127,6 +159,42 @@ st.commands = sign(movement);
 st.totalMotorSeconds = st.totalMotorSeconds + abs(movement)./max(cfg.actSpeed,eps);
 st.lengths = new;
 st.angles = th;
+% Static gravitational actuator forces at the NEW orientation.
+% Signed: positive = force extending the actuator, negative = compression.
+st.load = staticLoads(st.angles,cfg);
+% Electrical model (V2.1): ON-state current + force contribution + START
+% transient; report a STEP-AVERAGE current rather than treating every
+% fractional movement as a FULL interval of full motor current.
+%
+% The simulation uses hypothetical actuators, NOT measured motor constants.
+% Running current cannot be identified from gravity force alone.
+%
+% Active travel time per simulation step (smaller on a final short move).
+moveTimeSec = min(dt,abs(movement)./max(cfg.actSpeed,eps));
+isMoving = moveTimeSec > 1e-10;
+st.movementDuty = moveTimeSec./dt;
+newDirection = sign(movement);
+startNow = isMoving & (~st.wasContinuouslyRunning | ...
+    (newDirection~=st.previousDirection));
+% Nonregenerative magnitude model: treats gravity assisting/resisting
+% symmetrically; actual winding losses/regen could differ.
+loadRunningA = abs(st.load.forceN).*cfg.actSpeed ...
+    /(cfg.assumedDriveEfficiency*cfg.assumedMotorVoltageV);
+runningCurrentA = cfg.assumedNoLoadCurrentA + loadRunningA;
+startSeconds = double(startNow).*min(cfg.assumedStartDurationSec,moveTimeSec);
+st.loadCurrentContributionA = loadRunningA.*st.movementDuty;
+st.startCurrentContributionA = cfg.assumedStartExtraCurrentA.*startSeconds./dt;
+st.currentA = runningCurrentA.*st.movementDuty ...
+    + st.startCurrentContributionA ...
+    + cfg.assumedHoldCurrentA.*(1-st.movementDuty);
+st.peakCurrentA = max(cfg.assumedHoldCurrentA, ...
+    runningCurrentA + double(startNow).*cfg.assumedStartExtraCurrentA);
+st.peakCurrentA(~isMoving) = cfg.assumedHoldCurrentA(~isMoving);
+st.wasContinuouslyRunning = isMoving & (moveTimeSec >= dt-1e-9);
+st.previousDirection = newDirection;
+st.batteryEnergyWh = st.batteryEnergyWh ...
+    + (sum(st.currentA)*cfg.assumedMotorVoltageV*dt) ...
+    / (3600*cfg.assumedDCDCefficiency);
 st.t = st.t + dt;
 st.sensor = sense(st.angles,az,elev,cfg);
 st.minCornerM=cornerClearance(st.angles,cfg);
@@ -152,6 +220,20 @@ st.hist.northLengthIn(end+1,1)=st.lengths(1)/0.0254;
 st.hist.westLengthIn(end+1,1)=st.lengths(2)/0.0254;
 st.hist.sunAzDeg(end+1,1)=az;
 st.hist.sunElevDeg(end+1,1)=elev;
+st.hist.northForceLbf(end+1,1)=st.load.forceLbf(1);
+st.hist.westForceLbf(end+1,1)=st.load.forceLbf(2);
+st.hist.northCurrentA(end+1,1)=st.currentA(1);
+st.hist.westCurrentA(end+1,1)=st.currentA(2);
+st.hist.northLoadAddedMilliA(end+1,1)=1000*st.loadCurrentContributionA(1);
+st.hist.westLoadAddedMilliA(end+1,1)=1000*st.loadCurrentContributionA(2);
+st.hist.northStartAddedA(end+1,1)=st.startCurrentContributionA(1);
+st.hist.westStartAddedA(end+1,1)=st.startCurrentContributionA(2);
+st.hist.northCurrentPeakA(end+1,1)=st.peakCurrentA(1);
+st.hist.westCurrentPeakA(end+1,1)=st.peakCurrentA(2);
+st.hist.northMotorDuty(end+1,1)=st.movementDuty(1);
+st.hist.westMotorDuty(end+1,1)=st.movementDuty(2);
+st.hist.batteryEnergyWh(end+1,1)=st.batteryEnergyWh;
+st.hist.yawResidualNm(end+1,1)=st.load.residualMomentNm(3);
 end
 
 function [desired, mode] = steer(m,theta,cfg)
@@ -290,7 +372,90 @@ if any(~isfinite(theta)) || ...
     yes=false;return;
 end
 L=lengths(theta,cfg);
+[~,elbowsReachable]=elbowGeometry(theta,cfg);
 yes=all(L>=cfg.actMinLength-1e-8) && ...
     all(L<=cfg.actMaxLength+1e-8) && ...
+    all(elbowsReachable) && ...
     cornerClearance(theta,cfg)>=cfg.minPanelHeight-1e-8;
+end
+
+function [P,reachable] = elbowGeometry(theta,cfg)
+% Freely folding, equal-length two-segment elbow kinematics.
+% There are infinitely many possible hinge locations; this chooses a
+% consistent bent configuration for plotting. Real hinge axes, force
+% transfer, yaw stability, and all link collisions remain unvalidated.
+R=rotation(theta);
+P=zeros(3,3,2);
+reachable=false(2,1);
+for i=1:2
+    a=cfg.elbowLowerMounts(:,i);
+    b=cfg.pivot+R*cfg.elbowUpperMounts(:,i);
+    v=b-a;
+    d=norm(v);
+    link=cfg.elbowLinkLength(i);
+    reachable(i)=(d<=2*link+1e-9) && (d>=1e-8);
+    middle=(a+b)/2;
+    preferred=cfg.elbowKneeSide(:,i);
+    if d>1e-10
+        perpendicular=preferred-v*(dot(v,preferred)/d^2);
+    else
+        perpendicular=preferred;
+    end
+    normPerp=norm(perpendicular);
+    if normPerp<1e-8
+        % Fallback for nearly parallel preferred direction and link axis.
+        perpendicular=cross(v,[0;0;1]);
+        normPerp=norm(perpendicular);
+    end
+    if normPerp<1e-8
+        perpendicular=[1;0;0];
+        normPerp=1;
+    end
+    perpendicular=perpendicular/normPerp;
+    knee=middle + sqrt(max(0,link^2-d^2/4))*perpendicular;
+    P(:,:,i)=[a,knee,b];
+end
+end
+
+function load = staticLoads(theta,cfg)
+%STATICLOADS Quasi-static gravity-only axial actuator force calculation.
+% Coordinates use the existing central ball-joint geometry, and the
+% actuators are ONLY assumed to balance moments about the x and y axes.
+% The ball joint carries net force. Remaining yaw torque must be resisted
+% by a DIFFERENT constraint; the drawn folding elbows are not validated.
+%
+% rCG: ball joint -> moving assembly's center of mass in WORLD coordinates.
+% Fgravity: global gravitational force of the moving assembly.
+% ai: ball joint -> actuator's UPPER pin in WORLD coordinates.
+% ui: unit vector along each actuator from its LOWER pin to its UPPER pin.
+% Qi = cross(ai,ui): moment per newton of axial actuator force.
+% Solve first 2 equations: [Q_Nxy Q_Wxy] [F_N;F_W] = -gravityMoment_xy.
+newtonPerLbf = 4.4482216152605;
+R=rotation(theta);
+weightN=cfg.upperAssemblyWeightLbf*newtonPerLbf;
+rCG=R*[0;0;cfg.cgHeightAbovePivotM];
+forceGravity=[0;0;-weightN];
+gMoment=cross(rCG,forceGravity);
+momentMap=zeros(3,2);
+for j=1:2
+    rTop=R*cfg.upperMounts(:,j);
+    from=cfg.lowerMounts(:,j);
+    to=cfg.pivot+rTop;
+    delta=to-from;
+    L=norm(delta);
+    if L<1e-8
+        error('Actuator endpoints coincide; force geometry is undefined.');
+    end
+    u=delta/L;
+    momentMap(:,j)=cross(rTop,u);
+end
+G=momentMap(1:2,:);
+if rcond(G)<1e-8
+    error('Near-singular actuator mounting leverage; forces cannot be determined.');
+end
+load.forceN=G\(-gMoment(1:2));
+load.forceLbf=load.forceN/newtonPerLbf;
+load.gravityMomentNm=gMoment;
+load.momentMap=momentMap;
+load.residualMomentNm=gMoment+momentMap*load.forceN;
 end
