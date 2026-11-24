@@ -15,14 +15,16 @@ function varargout = x_sensor_core(action, varargin)
 %
 % Safety: mechanical yaw, linkages, wind, force, physical sensing,
 % backdriving and electrical drivers are not verified in this demo.
-% v1.9 uses IDEALIZED short actuators at the outside rim midpoints; their
+% v2.2 uses IDEALIZED short actuators at the outside rim midpoints; their
 % pin-to-pin ranges are geometric requirements, not product specifications.
 
 switch lower(action)
     case 'config'
         cfg = tracker_config();
-        cfg.sensorBoardWidth = 0.120;   % m, X walls match 44:72 aspect
-        cfg.sensorWallHalfLength = 0.115; % m along each diagonal
+        cfg.sensorBoardWidth = 0.120;   % m; reference width for X sensor head
+        cfg.sensorBoardHeight = cfg.sensorBoardWidth * cfg.panelNS/cfg.panelEW;
+        cfg.sensorWallHalfLength = 0.5*hypot(cfg.sensorBoardWidth, ...
+                                             cfg.sensorBoardHeight); % m, half diagonal
         cfg.sensorWallHeight = 0.100;    % m raised vertical shading walls
         cfg.sensorRadius = 0.006;        % m sensor active circle radius
         cfg.sensorNorthOffset = 0.015;   % m from cross center
@@ -269,7 +271,7 @@ end
 
 function sensor = sense(theta,az,elev,cfg)
 % Geometric ray-shadow calculation on 4 circular photosensor patches.
-% The two thin vertical X walls follow PANEL DIAGONALS (44:72).
+% The two thin vertical X walls follow PANEL DIAGONALS (48:68).
 % Each patch is discretized; partial shadow is the blocked ray fraction.
 s=sunVector(az,elev);
 sLocal=rotation(theta)'*s;

@@ -1,177 +1,119 @@
-SOLAR TRACKER DIGITAL TWIN — v1.9 | OUTER-RIM MOUNTS
-==================================================
-HOW TO RUN
-1. Extract all .m files to the same folder.
-2. Set the MATLAB Current Folder to that folder.
-3. In the MATLAB Command Window:
-      clear x_sensor_tracker_demo x_sensor_core tracker_config
-      x_sensor_tracker_demo
-4. Run geometric and tracking tests:
-      verify_x_sensor_tracker
+SOLAR TRACKER — MATLAB DIGITAL TWIN v2.2
+48 x 68 inch panel | N/W edge-mounted virtual actuators | S/E elbow supports
+========================================================================
 
-DESIGN GEOMETRY
-- Panel size: 44 in East-West x 72 in North-South.
-- Moving top frame: 12 in above the bottom frame when level.
-- Central ball-joint pivot: 6 in above the lower frame plane.
-- Top panel local mounting plane: 6 in above the ball joint.
-- Each actuator: upper and lower pin at the EXACT corresponding outer
-  rim midpoint, not an inward offset or internal cross-beam.
-    North bottom: (0, +36, 0) inches.
-    North upper:  (0, +36, +6) inches, relative to the ball joint.
-    West bottom:  (-22, 0, 0) inches.
-    West upper:   (-22, 0, +6) inches, relative to the ball joint.
-- South and east two-link elbows retained (10 in per link, idealized).
-- Each tilt axis has a +/-8-degree limit, including simultaneous tilt.
-- X-cross sunlight direction sensor and GUI controls retained.
+INSTALL / RUN
+1. Unzip all files into ONE folder.
+2. In MATLAB, make that folder the Current Folder.
+3. Run:
+     clear x_sensor_tracker_demo x_sensor_core tracker_config
+     x_sensor_tracker_demo
+4. To run built-in numerical checks, enter:
+     verify_x_sensor_tracker
+5. Use EXPORT CSV in the GUI to save sensor errors, position, force,
+   illustrative current, and cumulative estimated electrical energy.
 
-REQUIRED PIN-TO-PIN LENGTHS, SAMPLED OVER +/-8 DEGREE ENVELOPE
-                 North         West
-  Lowest        6.9405 in     8.8826 in
-  Level        12.0000 in    12.0000 in
-  Highest      16.9932 in    15.0401 in
-  Travel       10.0528 in     6.1575 in
+WHAT CHANGED FROM VERSION 2.1
+- Corrected panel size from 44 x 72 in to 48 x 68 in.
+- Retained north-south orientation for the 68-inch long dimension.
+- Repositioned the NORTH actuator's upper and lower mounts at y=+34 in.
+- Repositioned the WEST actuator's upper and lower mounts at x=-24 in.
+- Repositioned SOUTH and EAST elbow mounts to y=-34 / x=+24 in.
+- Updated 3D upper/lower frame drawings and X-wall sensor aspect ratio.
+- Updated virtual actuator length endpoints for +/-8 degree two-axis tilt.
+- Updated calculated forces through the actual line-of-action geometry;
+  these propagate to the HYPOTHETICAL current and battery-energy curves.
+- Updated the numerical verification constants and documentation.
 
-VIRTUAL MECHANISMS DRAWN IN THE SIMULATION
-                North             West
-  Min length     6.25 in           8.25 in
-  Max length    17.75 in          15.75 in
-  Stroke        11.50 in           7.50 in
-  Motion speed   0.30 in/s         0.30 in/s (SIMULATED ONLY)
+DESIGN ASSUMPTIONS
+- Lower frame footprint = solar panel footprint in this idealized design.
+- Dimensions: East-West width = 48 in; North-South length = 68 in.
+- Area = 3264 square inches = 22.667 square feet = 2.1058 square meters.
+- Panel + upper moving frame weight = 55 lbf (unchanged assumption).
+- Moving assembly CG = 6 in above center ball joint at level.
+- Lower frame at z=0 in; upper frame at z=12 in when level.
+- Ball joint center at (x,y,z) = (0,0,6) in.
+- Maximum independent north/south pitch and east/west roll: +/-8 deg.
+- Keep panel corner at least 50 mm above lower-frame plane.
+- Upper mounts measured relative to ball-joint at local z=+6 in.
 
-IMPORTANT: THESE ARE ENGINEERING TARGETS, NOT PART NUMBERS.
-There is no confirmed conventional single-stage electric rod actuator that
-provides an approximately 11.5-inch stroke from a 6.25-inch retracted
-pin-to-pin length. Do not purchase based only on this virtual configuration.
+VIRTUAL ACTUATOR PIVOT LOCATIONS (inches):
+                          LOWER                 UPPER (local to ball joint)
+  NORTH actuator         (0,+34,0)              (0,+34,+6)
+  WEST actuator          (-24,0,0)              (-24,0,+6)
+  SOUTH two-link elbow   (0,-34,0)              (0,-34,+6)
+  EAST two-link elbow    (+24,0,0)              (+24,0,+6)
 
-The previously selected FIRGELLI C-Series FA-C-135-12-12 has a 16.5-inch
-minimum retracted length and cannot fit between these aligned rim anchors.
-The prior manufacturer current/force/power values are removed from this
-version rather than incorrectly applying them to a hypothetical motor.
+ACTUAL REQUIRED PIN-TO-PIN LENGTH ENVELOPES (FULL +/-8 deg, 2 axes):
+                        NORTH                 WEST
+  Min required           7.21755 in            8.60482 in
+  Level                 12.00000 in           12.00000 in
+  Max required          16.71421 in           15.31908 in
+  Required range         9.49666 in            6.71426 in
 
-Physical design alternatives:
-  A) Put lower end brackets roughly 10 in BELOW the lower rim (same x/y);
-     the original 16.5–28.5-in actuators can meet the calculated range,
-     but brackets and golf-cart space may make this unacceptable.
-  B) Rework motion through a bell crank/linkage or other compact mechanism,
-     then recompute actual actuator pin-to-pin lengths, stroke, force,
-     speed, holding load and collisions.
-  C) Raise frame gap by roughly 10 in and retain aligned outside mounts;
-     this may be impractical on a golf cart.
+HYPOTHETICAL SHORT MECHANISMS USED IN THE GUI (NOT ORDERABLE PARTS):
+                        NORTH                 WEST
+  Minimum length         6.50 in               7.75 in
+  Maximum length        17.50 in              16.00 in
+  Virtual stroke        11.00 in               8.25 in
+  Demonstration speed    0.30 in/s             0.30 in/s
+Both hypothetical drive envelopes have roughly 0.7-0.8 inch mechanical
+travel margin relative to the required endpoints. Short conventional
+single-stage linear actuators with these dimensions may not exist.
+The original FIRGELLI FA-C-135-12-12 cannot fit these direct vertical
+lower/upper rim attachments due to its 16.5-inch retracted length.
 
-MECHANICAL CAVEATS
-- All linkages in the simulation are ideal line segments, NOT mechanical CAD.
-- Hinge axes, body and linkage collisions, yaw restraint, wind-induced loads,
-  bolt/stiffener dimensions and physical limit switches are unverified.
-- The two freely folding elbows should not be assumed to prevent yaw.
-- No current or energy predictions are possible without a real drive choice.
-- Verify bottom clearance and structural stability before construction.
+CLEARANCE / LINKAGES
+- Idealized smallest panel corner height above z=0: about 3.858 in
+  throughout simultaneous +/-8 degree limits (without brackets/beams).
+- S/E articulated elbows remain two equal links of 10 inches EACH;
+  the model tests whether the hinges can reach, not their actual loads.
+- This is not detailed CAD collision checking. Missing: wind loading,
+  actuator body clearance, yaw constraint, elbow bearing orientations,
+  panel/frame stiffness, friction, backdrive/holding stability and
+  mechanical end stops. Do not claim the proposed linkage is validated.
 
+FORCE MODEL — GRAVITY ONLY
+For each pose R and center-of-mass offset r_CG:
+   tau_g = cross(R * r_CG, [0;0;-W])
+Each unit axial force at an upper pivot causes moment
+   tau_i = cross(R * upperPivot_i, axis_i)
+where axis_i points from fixed lower pin toward upper pin.
+The two actuators are solved together to balance x/y components of
+   tau_g + F_N*tau_N + F_W*tau_W = 0
+The yaw residual is reported separately. Calculations exclude all
+friction, dynamic acceleration, wind, elbows' reactions, active hold.
+Gravity-only force magnitude at (pitch,roll)=(+8,+8) deg:
+   NORTH about 1.396 lbf; WEST about 1.968 lbf.
+Values change across the tilt range; signs indicate axial direction.
+The 55-lb weight and CG position are still unverified design estimates.
 
-V2.0 ADDITION: CALCULATED ACTUATOR FORCE AND EXAMPLE CURRENT
-----------------------------------------------------------
-The GUI's lower row has three history charts: sensor imbalance, signed
-quasi-static gravitational force on each actuator (lbf), and illustrative
-motor running current (A). The status box shows values for the current
-panel pose. EXPORT CSV includes force, current and cumulative energy.
+CURRENT MODEL — UNVERIFIED EXAMPLE ONLY
+No real actuator with this length envelope has been selected. Therefore
+actual currents CANNOT be identified from this force calculation alone.
+Hypothetical settings in tracker_config.m:
+   motor voltage: 12 V; no-load ON-state current: 1.0 A each
+   overall drive efficiency: 35%; actuator speed: 0.30 in/s
+   assumed extra startup current: 1.5 A for 0.08 s
+   assumed DC-DC converter efficiency: 90%.
+Steady example: I = 1 A + abs(force_N * speed_mps)/(0.35 * 12 V).
+The GUI shows step-averaged current and illustrative instantaneous peaks.
+A stopped, unpowered motor draws zero in the model, but actual holding
+mechanics/backdriving are NOT assessed. No purchase, fuse, cable or
+thermal rating may be derived from these fictional current parameters.
 
-With the ball joint as origin and the upper center-of-mass point 6 inches
-above it, total moving assembly weight is 55 lbf:
-    M_gravity = cross(R * [0;0;h_CG], [0;0;-55*4.448221615])
-Each upper actuator's mounting pin is at R*upperMount, with force along the
-line from its fixed lower pin to the rotated upper pin. The required axial
-forces are found by simultaneously balancing X and Y gravitational torques:
-    [M_Nx M_Wx; M_Ny M_Wy] * [F_N;F_W] = -M_gravity(1:2)
-Signed axial force: + means EXTENDING force, - means COMPRESSIVE force.
-This is quasi-static force under GRAVITY ONLY. No acceleration, friction,
-wind, or forces generated by folding elbow linkages are included. The
-model returns a residual YAW torque which would need resisting via a
-properly engineered constraint; no such constraint has been validated.
+SENSOR MODEL / ARDUINO
+- Four simulated light values: N,E,S,W, with diagonal X-wall shadows.
+- Sensor wall orientation uses the NEW 48:68 panel aspect ratio.
+- Controller sample interval: 0.20 seconds; normalized error deadband:
+  0.025; proportional tilt request gain: 2 deg per unit error.
+- Simulated mean low-light threshold: 100 (not calibrated ADC counts).
+- Tinkercad/Arduino analogRead pins, low-light rule, and motor PWM
+  DO NOT depend directly on panel physical dimensions. Arduino code
+  must be revised only if physical geometry, feedback and limits
+  are actually implemented in that controller.
 
-Example running-current model for a NON-SELECTED virtual mechanism:
-    P_mech = |F_axis| * |actuator linear speed|
-    I_example = I_no_load + P_mech / (eta_drive * V)
-This calculation runs only when an actuator actually changes length.
-V=12 V, I_no_load=1.0 A/actuator, eta_drive=0.35 are HYPOTHETICAL
-placeholders: edit tracker_config.m once actual motor/gearbox/screw
-specifications or manufacturer current-vs-load data become available.
-Current is ZERO in the model while not moving: active electrical holding,
-backdriving, start-up surge and coasting are unmodeled. Motor losses are
-bracketed using |force*speed| even on gravity-assisted motion; no claim
-of exact electrical power or current is made.
-
-Accumulated battery energy uses an assumed 90% DC-DC efficiency:
-    E_battery_Wh += (I_N+I_W)*12*dt/(3600*0.9)
-This is illustrative; do not select protection or wire gauge from it.
-
-To query the forces directly from MATLAB:
-    cfg = x_sensor_core('config');
-    load = x_sensor_core('forces',deg2rad([8;8]),cfg);
-    fprintf('North %.3f lbf, West %.3f lbf\n',load.forceLbf);
-Then run verify_x_sensor_tracker before using results in the report.
-
-
-
-V2.1 ELECTRICAL PLOT CORRECTION — ASSUMPTIONS, NOT MEASUREMENTS
--------------------------------------------------------------
-Why Version 2.0 looked like a 0/1 A switch:
-The virtual geometry puts a small gravity-only force on each actuator.
-For an illustrative 8 deg pitch + 8 deg roll pose, that is about 1.32 lbf
-(North) and 2.15 lbf (West). At the assumed 0.30 in/s travel speed
-and assumed 35% efficiency, gravity adds only about 11 mA / 17 mA
-to the ASSUMED 1 A unloaded running current. Plotting 0, 1.011 A,
-and 1.017 A at ordinary axis resolution looks almost binary.
-
-The simulation now distinguishes THREE electrical current components:
-  1. Assumed ON-state no-load current (cfg.assumedNoLoadCurrentA)
-  2. Load-induced current while moving (gravity only):
-       deltaI = abs(gravityForceN)*actSpeedMps /
-                (assumedDriveEfficiency*assumedMotorVoltageV)
-  3. Short assumed STARTUP transient added when a motor initially starts
-     or reverses direction (cfg.assumedStartExtraCurrentA and
-     cfg.assumedStartDurationSec).
-
-Instead of assuming the motors run continuously for every whole controller
-interval, the code uses the actual displacement to calculate movement
-time during each step. The main current traces are STEP AVERAGES, taking
-into account the motor's ON fraction. The dotted traces are illustrative
-PEAK currents, which are not resolved by the 0.20 s time-step.
-
-With the original assumptions, e.g., at 8/8 deg, the theoretical steady
-moving current is 1.011 / 1.017 A. If the motors start at the beginning
-of a full 0.20 s simulation step, the extra 1.5 A surge for 0.08 s raises
-the STEP-AVERAGE to about 1.611 / 1.617 A. An illustrative instantaneous
-peak would be 2.511 / 2.517 A.
-
-DEFAULT RESTING CURRENT IS ZERO:
-Zero current only represents an UNPOWERED motor driver. It does not
-prove the motor can hold a load without backdriving. Set
-cfg.assumedHoldCurrentA if a selected driver ACTUALLY keeps the motor
-electrically energized to hold position. Do not use an arbitrary hold
-current to mask missing mechanics.
-
-To adjust the example parameters in tracker_config.m:
-    cfg.assumedNoLoadCurrentA = [1.0;1.0];
-    cfg.assumedStartExtraCurrentA = [1.5;1.5]; % 0 disables surge
-    cfg.assumedStartDurationSec = 0.08;       % seconds
-    cfg.assumedHoldCurrentA = [0;0];         % off = zero current
-    cfg.assumedDriveEfficiency = 0.35;
-    cfg.assumedMotorVoltageV = 12.0;
-
-The GUI now includes solid STEP-AVERAGED and dotted PEAK current plots.
-Status shows current to three decimal places and load-related additions
-in milliamps. CSV export includes these traces, startup contribution,
-load contribution, and movement duty fraction.
-
-WARNING: ALL ELECTRICAL INPUTS REMAIN HYPOTHETICAL because there is
-no identified compact actuator fitting the v1.9 direct-edge mount.
-These curves cannot establish real startup peaks, battery drain, motor
-protection ratings, active holding loads, or stopping behavior.
-Real actuator electrical data or a calibrated current-vs-load curve
-would be needed for a defensible current prediction.
-
-RUN:
-    clear x_sensor_tracker_demo x_sensor_core tracker_config
-    x_sensor_tracker_demo
-OPTIONAL VALIDATION:
-    verify_x_sensor_tracker
-
+NOTE
+All results here are a mathematical simulation. MATLAB has not been
+executed in this environment. Independent geometry/force evaluations
+were completed; run verify_x_sensor_tracker in MATLAB on your machine.

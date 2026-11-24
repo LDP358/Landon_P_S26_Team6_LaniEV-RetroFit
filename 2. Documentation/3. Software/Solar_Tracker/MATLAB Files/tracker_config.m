@@ -8,11 +8,11 @@ function cfg = tracker_config()
 % below are VIRTUAL design targets, not tested physical hardware.
 % Real equipment, force, current, weather and holding safety are unverified.
 
-% Panel / frame design assumption: 44 in East-West by 72 in North-South.
+% Panel / frame design assumption: 48 in East-West by 68 in North-South.
 % Swap these values if the long edge actually runs East-West. Geometry must
 % be replaced with measured frame dimensions before hardware sign-off.
-cfg.panelEW = 44 * 0.0254;
-cfg.panelNS = 72 * 0.0254;
+cfg.panelEW = 48 * 0.0254;
+cfg.panelNS = 68 * 0.0254;
 cfg.panelArea = cfg.panelEW * cfg.panelNS;
 cfg.panelEfficiency = 0.205;       % illustrative, NOT measured
 
@@ -25,21 +25,21 @@ cfg.pivot = [0; 0; 6 * 0.0254];
 cfg.upperAssemblyWeightLbf = 55; 
 cfg.cgHeightAbovePivotM = 6 * 0.0254;
 
-% OUTER-RIM MIDPOINT LAYOUT (v1.9): x=East, y=North, z=Up.
+% OUTER-RIM MIDPOINT LAYOUT (v2.2): x=East, y=North, z=Up.
 % Each actuator's LOWER pivot is on the outside rim of the fixed frame,
 % directly under its UPPER pivot when the moving panel is horizontal.
 % No internal mounting cross-bars or inward mounting offsets are used.
 %
 % Columns: [NORTH actuator, WEST actuator]
-%   North lower = (0,+36,0) in; north upper = (0,+36,12) in when level
-%   West lower  = (-22,0,0) in; west upper  = (-22,0,12) in when level
+%   North lower = (0,+34,0) in; north upper = (0,+34,12) in when level
+%   West lower  = (-24,0,0) in; west upper  = (-24,0,12) in when level
 % Upper positions are relative to the central ball joint, at z=+6 in.
 in = 0.0254;
-cfg.lowerMounts = in * [  0, -22;
-                         +36,   0;
+cfg.lowerMounts = in * [  0, -24;
+                         +34,   0;
                            0,   0];
-cfg.upperMounts = in * [  0, -22;
-                         +36,   0;
+cfg.upperMounts = in * [  0, -24;
+                         +34,   0;
                           +6,  +6];
 cfg.lowerMountRadialSetbackIn = 0;
 
@@ -53,30 +53,30 @@ cfg.lowerMountRadialSetbackIn = 0;
 % static loads without additional linkage design. No arm-arm collision
 % checking or joint force model is currently implemented.
 cfg.elbowNames = {'South','East'};
-cfg.elbowLowerMounts = in * [  0, +22;
-                                -36,   0;
+cfg.elbowLowerMounts = in * [  0, +24;
+                                -34,   0;
                                   0,   0];
-cfg.elbowUpperMounts = in * [  0, +22;
-                                -36,   0;
+cfg.elbowUpperMounts = in * [  0, +24;
+                                -34,   0;
                                  +6,  +6];
 cfg.elbowLinkLength = [10;10] * in;  % length of EACH segment
 cfg.elbowKneeSide = [1,0;0,1;0,0];  % preferred knee bend directions
 
 % REQUIRED PIN-TO-PIN ENVELOPE FROM EXACT 3D GEOMETRY (±8 deg both axes):
-%   North: 6.9405 to 16.9933 in (required travel 10.0528 in)
-%   West:  8.8826 to 15.0401 in (required travel  6.1575 in)
+%   North: 7.2175 to 16.7142 in (required travel  9.4967 in)
+%   West:  8.6048 to 15.3191 in (required travel  6.7143 in)
 %
-% VIRTUAL ACTUATOR ENVELOPES, with ~0.6–0.8 inch end margins.
+% VIRTUAL ACTUATOR ENVELOPES, with ~0.7–0.9 inch end margins.
 % THESE ARE NOT A SELECTED OR VERIFIED COMMERCIALLY AVAILABLE PRODUCT.
-% In particular, a rod-style actuator with <=6.25" fully retracted
-% length AND >=11.5" stroke is not realistic for a conventional single-
+% In particular, a rod-style actuator with <=6.5" fully retracted
+% length AND >=11" stroke is not realistic for a conventional single-
 % stage design. This MATLAB model illustrates an IDEALIZED mechanism.
 % A custom multistage mechanism or a linkage/frame redesign is needed for
 % physical realization. DO NOT represent this as a procurement-ready BOM.
 cfg.actuatorModel = 'VIRTUAL COMPACT EXTENDING MECHANISM - NOT SELECTED';
 cfg.physicalActuatorSelected = false;
-cfg.actMinLength = [6.25;8.25] * in; % north, west virtual retracted pin distance
-cfg.actMaxLength = [17.75;15.75] * in; % north, west virtual max pin distance
+cfg.actMinLength = [6.50;7.75] * in; % north, west virtual retracted pin distance
+cfg.actMaxLength = [17.50;16.00] * in; % north, west virtual max pin distance
 cfg.actStrokeM = cfg.actMaxLength - cfg.actMinLength; % virtual strokes
 cfg.actVoltageV = NaN;            % no selected motor or rated voltage
 cfg.actRatedForceN = NaN;         % unknown until mechanism is selected
