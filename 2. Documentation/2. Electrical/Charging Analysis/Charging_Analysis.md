@@ -1,87 +1,127 @@
-# Purpose
+# Experimental Analysis — Solar Charging Analysis
 
-The purpose of this experiment was to establish baseline charging performance for the original Lani EV solar system before the team implements its solar-tracking design. Both systems can charge the golf cart while it is moving. The team’s design adds the ability to track the sun while the cart is parked. Voltage and current were measured between the MPPT controller and the battery, along with illuminance and battery percentage. The same measurements will be collected after the tracking system is installed to compare charging performance under similar conditions.
+## 1. Purpose and Justification
 
-# Electrical Power Analysis
+The purpose of this experiment was to establish the charging performance of the original Lani EV fixed-panel solar charging system before implementing the team's solar-tracking design. Both systems are intended to support solar charging while the golf cart is moving. The team's proposed design adds solar tracking when the cart is parked, with the goal of increasing the electrical energy delivered to the battery by improving the panel's alignment with sunlight.
 
-Voltage and current were measured between the MPPT charge controller and the golf cart battery. Battery-side charging power was calculated using P = VI. This represents power delivered from the controller toward the battery, rather than power measured directly at the solar panel. Table 1 shows the average and peak charging power for each test day, along with average estimated irradiance.
+The experiment provides baseline measurements of battery-side charging voltage, current, power, estimated energy, illuminance, and battery state of charge (SOC). These measurements relate to the project's objective of improving solar charging performance. A quantitative conclusion about improvement cannot be made until the tracking configuration is tested under comparable conditions.
+
+## 2. Detailed Procedure
+
+### 2.1 Equipment and test configuration
+
+| Equipment | Make and model | Use |
+|---|---|---|
+| Digital multimeter | Fluke 15B+ | Measure DC charging voltage and current |
+| Illuminance meter | URCERI MT-912 | Measure illuminance (lux) |
+| Solar charging system | Original Lani EV fixed-panel configuration | Baseline system under test |
+
+Testing was conducted behind the Ashraf Islam Engineering Building on Stadium Drive, between University Drive and West 10th Street. The golf cart was positioned outdoors with the fixed solar panel exposed to sunlight and with no intentional shading of the panel. The team collected readings at approximately 25-minute intervals on five separate days. At each interval, the team recorded the measurement time, voltage, current, illuminance, and battery SOC.
+
+The voltage and current measurements were taken between the MPPT charge controller and the battery to determine the charging power delivered to the battery. This measurement location will also be used when testing the team's solar-tracking design to ensure a consistent comparison between the original and modified systems. The photograph below identifies the connection location.
+
+<img src="measurement_disconnect.jpeg" width="350">
+
+*Figure 1. Disconnects beneath the original solar panel at the controller-to-battery measurement location.*
+
+For illuminance readings, the light-meter sensor was positioned parallel to the panel surface and kept unobstructed. During each test, the team positioned the golf cart in an area with direct sunlight and collected voltage, current, illuminance, and battery percentage measurements at approximately 25-minute intervals. The same measurement locations and procedures were used throughout testing to maintain consistency between the results.
+
+### 2.2 Calculations
+
+Battery-side charging power was calculated from the recorded voltage and current:
+
+$$P = VI$$
+
+where $P$ is power in watts, $V$ is measured voltage in volts, and $I$ is measured current in amperes.
+
+Since an irradiance meter was unavailable during testing, the team used a URCERI MT-912 illuminance meter to measure sunlight intensity. The recorded illuminance values were converted to estimated irradiance using the following equation:
+
+$$G_{\mathrm{est}} = \frac{L}{122}$$
+
+where $L$ is illuminance in lux, $G_{\text{est}}$ is estimated irradiance in W/m², and 122 lm/W is the assumed daylight luminous efficacy. Because this conversion depends on sunlight conditions, the calculated irradiance values are approximations.
+
+Charging energy was estimated from the sampled charging power using the trapezoidal approximation:
+
+$$E_{\mathrm{est}} \approx \sum_{i=1}^{n-1}\frac{P_i+P_{i+1}}{2}\,(t_{i+1}-t_i)$$
+
+where time differences are expressed in hours and the resulting energy is in watt-hours. These energy estimates describe the sampled testing intervals; they are not direct battery energy-meter measurements.
+
+## 3. Expected Results
+
+The team expected the original fixed-panel configuration to produce measurable battery charging power that would vary throughout the day as sunlight conditions and the sun's position changed. After the solar-tracking system is installed, the team expects improved alignment during parked operation to increase charging power during portions of the day, especially when the fixed panel is less favorably oriented. The principal comparison will be battery-side charging energy over a comparable test period, supported by charging-power profiles and battery SOC readings.
+
+## 4. Actual Results
+
+Five days of baseline testing were completed with the original fixed solar panel. The results below summarize the measurements and calculated values. For consistency, the final November 8 reading was retained in the raw data but excluded from the calculations and graphs so that all five test periods cover 4 hours and 35 minutes.
 
 **Table 1. Average and Peak Charging Power for the Original Design**
 
-| Test date    | Average power (W) | Peak power (W) | Avg. estimated irradiance (W/m²) |
-|--------------|-------------------|----------------|----------------------------------|
-| Oct. 9, 2026 | 145.32            | 202.37         | 330.9                            |
-| Nov. 3, 2026 | 138.48            | 192.75         | 350.8                            |
-| Nov. 7, 2026 | 181.99            | 205.35         | 402.7                            |
-| Nov. 8, 2026 | 161.31            | 179.62         | 417.6                            |
-
-Of the four test days, November 7 had the highest average power at 181.99 W and the highest single reading at 205.35 W. November 3 had the lowest average power at 138.48 W. Although November 8 had the highest average estimated irradiance, its average power was lower than November 7. This shows that the amount of sunlight was not the only factor affecting the readings. The panel angle, battery charging conditions, temperature, and changes in weather could also have influenced the results.
-
-# Estimated Energy Production
-
-Charging energy over each test period was estimated using the trapezoidal method, E ≈ Σ\[(Pᵢ + Pᵢ₊₁)/2\]Δt. This estimates the area under the power-versus-time curve. When time is expressed in hours, the resulting energy is in watt-hours (Wh).
+| Test date | Average charging power (W) | Peak charging power (W) | Average estimated irradiance (W/m²) |
+|---|---:|---:|---:|
+| October 9, 2026 | 145.32 | 202.37 | 330.9 |
+| November 3, 2026 | 138.48 | 192.75 | 350.8 |
+| November 7, 2026 | 181.99 | 205.35 | 402.7 |
+| November 8, 2026 | 165.27 | 179.62 | 424.7 |
+| November 15, 2026 | 179.10 | 202.13 | 360.5 |
 
 **Table 2. Estimated Charging Energy for the Original Design**
 
-| Test date | Recorded duration | Estimated energy (Wh) |
-|-----------|-------------------|-----------------------|
-| Oct. 9    | 4 h 35 min        | 681.9                 |
-| Nov. 3    | 4 h 35 min        | 648.8                 |
-| Nov. 7    | 4 h 35 min        | 851.7                 |
-| Nov. 8    | 5 h               | 814.1                 |
+| Test date | Testing duration | Estimated charging energy (Wh) | Battery SOC start | Batter SOC end | SOC change (percentage points) |
+|---|---:|---:|---:|---:|---:|
+| October 9 | 4 h 35 min | 681.9 | 6% | 16% | +10 |
+| November 3 | 4 h 35 min | 648.8 | 17% | 24% | +7 |
+| November 7 | 4 h 35 min | 851.7 | 24% | 35% | +11 |
+| November 8 | 4 h 35 min | 763.3 | 34% | 45% | +11 |
+| November 15 | 4 h 35 min | 832.3 | 45% | 57% | +12 |
 
-November 7 had the highest estimated energy of the four tests at 851.7 Wh. November 3 had the lowest at 648.8 Wh. These values are estimates based on measurements taken at intervals, rather than continuous energy measurements. The November 8 test also lasted longer than the other three, so the energy totals should be compared with that difference in mind.
+### 4.1 Charging power throughout the test days
 
-# Estimated Irradiance
+<img src="4.1_power_vs_time.png" width="500">
 
-An irradiance meter was not available for testing, so the team used an illuminance meter to record incoming light. Irradiance was estimated using G ≈ L/K, where L is illuminance in lux and K is the assumed luminous efficacy of daylight. A value of K = 122 lm/W was used throughout the calculations. Since illuminance measures visible light rather than total solar energy, the irradiance values are estimates. The measured voltage and current were used to calculate charging power delivered from the MPPT controller toward the battery.
+*Figure 2. Battery-side charging power versus time for the five fixed-panel tests.*
 
-# Expected Improvement from Solar Tracking
+The power traces show how charging power varied throughout each testing period. Since the measurements were taken between the MPPT controller and the battery, the recorded values represent the charging power delivered toward the battery rather than the direct electrical output of the solar panel.
 
-Both systems can charge the golf cart while it is moving. The team’s design also allows the panel to track the sun while the cart is parked. Adjusting the panel angle during parked periods is expected to improve charging, particularly in the morning and afternoon. Once the tracking system is installed, the team will repeat the measurements and compare charging power and energy against the original system under similar conditions.
+### 4.2 Average charging power by date
 
-# Limitations and Comparison Requirements
+<img src="4.2_power_by_dates.png" width="500">
 
-- Because an irradiance meter was unavailable, irradiance was estimated from illuminance using 122 lm/W. These values are not direct irradiance measurements.
+*Figure 3. Average battery-side charging power for each baseline test day.*
 
-- Measurements were taken about every 25 minutes. Changes in sunlight or power between readings may not appear in the data.
+The average charging power varied across the five testing days, with the lowest average of 138.48 W recorded on November 3 and the highest average of 181.99 W recorded on November 7.
 
-- Weather, panel temperature, solar angle, and the battery’s starting charge level were not necessarily identical across the test days.
+### 4.3 Estimated charging energy by date
 
-- Voltage and current were measured between the MPPT controller and the battery, so the calculated power is battery-side charging power, not direct panel output.
+<img src="4.3_energy_by_dates.png" width="500">
 
-- Testing of the tracking design should use the same instruments and measurement points, with test duration, time of day, and battery conditions kept as consistent as possible.
+*Figure 4. Estimated battery-side charging energy during each test period.*
 
-# Graphical Results — Original Design
+Estimated charging energy ranged from 648.8 Wh on November 3 to 851.7 Wh on November 7. These values were calculated over the same 4-hour-and-35-minute test duration for all five days.
 
-Figures 1–4 show measurements from the original charging system collected on October 9 and November 3, 7, and 8, 2026. These results will serve as the baseline for comparison with the tracking design.
+### 4.4 Battery state of charge
 
-## Figure 1. Power throughout each test day
+<img src="4.4_battery_SOC.png" width="500">
 
-![Experimental analysis graph](media/image1.png)
+*Figure 5. Recorded battery state of charge over the five fixed-panel test days.*
 
-Power changed throughout each test day. The curves also show that the measurements were taken over different time windows, so this graph is a baseline rather than a direct comparison with tracking.
+Battery SOC increased during all five testing days, with increases ranging from 7 to 12 percentage points. These results show that the original fixed-panel system was able to charge the battery throughout each testing period. While SOC provides a useful indication of charging performance, it does not directly represent the amount of energy delivered to the battery.
 
-## Figure 2. Average power by test date
+## 5. Interpretation and Conclusions
 
-![Experimental analysis graph](media/image2.png)
+The five baseline tests demonstrate that the original fixed-panel charging system delivered measurable electrical power toward the golf cart battery during outdoor testing. Average charging power ranged from 138.48 W to 181.99 W, with the highest recorded instantaneous power reaching 205.35 W. Estimated charging energy ranged from 648.8 Wh to 851.7 Wh over the testing periods. Battery SOC increased during all five tests, with gains ranging from 7 to 12 percentage points.
 
-November 7 had the highest average power of the four test days. Differences between days may be related to both sunlight and charging conditions.
+The differences in charging performance between testing days can be influenced by several factors, including sunlight intensity, weather conditions, temperature, and battery state of charge. Since irradiance was estimated using illuminance measurements and charging energy was calculated from recorded voltage and current measurements, these values provide an estimate of the system's charging performance. Overall, the results establish a baseline for evaluating the performance of the original fixed-panel solar charging system.
 
-## Figure 3. Estimated energy by test date
+The baseline experiment successfully documented the charging performance of the original fixed-panel solar charging system. The collected data provides a reference for comparing the original system with the team's proposed solar-tracking design. Future testing will use similar measurement procedures to compare charging power, estimated charging energy, and battery SOC between the two configurations.
 
-![Experimental analysis graph](media/image3.png)
+## 6. Complete, Updated Component Inventory
 
-The energy totals were estimated from the power readings. November 8 had a longer test period than the other days, which should be considered when comparing totals.
+The following components were used in the solar charging experiment. The solar charging components were provided by the project sponsor, while the golf cart was provided by Tennessee Tech University.
 
-## Figure 4. Battery percentage throughout testing
-
-![Experimental analysis graph](media/image4.png)
-
-The battery percentage readings show how the reported state of charge changed during testing. On October 9, the battery increased from 6% to 16%, a gain of 10 percentage points. On November 3, it increased from 17% to 24%, a gain of 7 percentage points. On November 7, it increased from 24% to 35%, a gain of 11 percentage points. On November 8, it increased from 34% to 46%, a gain of 12 percentage points. The starting battery percentages and test durations differed, so these changes should not be treated as direct measures of charging energy.
-
-After installation, the team will repeat the measurements at the same battery-side locations and under similar conditions. Average charging power and estimated charging energy will then be compared over matching test periods, with particular attention to the tracking system’s performance while the cart is parked.
-
-# Conclusion
-
-The original Lani EV solar charging system produced average battery-side charging power ranging from 138.48 W to 181.99 W across the four testing days. The highest estimated charging energy was recorded on November 7 at 851.7 Wh. These results show how the original system performs under different sunlight and charging conditions and provide a baseline for evaluating the team’s solar-tracking design. Once the tracking system is implemented, the team will repeat the measurements under similar conditions to determine whether solar tracking increases the electrical energy delivered to the golf cart’s battery.
+| Component | Quantity | Source |
+|---|---:|---|
+| Solar panel | 1 | Provided by sponsor |
+| MPPT charge controller | 1 | Provided by sponsor |
+| Golf cart battery system | 1 | Provided by sponsor |
+| Solar panel frame | 1 | Provided by sponsor |
+| Golf cart | 1 | Provided by  Tennessee Tech University |
