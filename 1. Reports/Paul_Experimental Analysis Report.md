@@ -11,9 +11,9 @@
 | Display/Power Button | 0.000V                   |
 | MPPT                 | 14.50V                   |
 
-The multimeter displayed a positive voltage for the golf cart controller and MPPT, signifying each terminal was properly labeled. When checking the charger and display/power button, no voltage was read by the multimeter. This occurs due to the charger being a device that sends voltage rather than receiving. The display and power button follow similar rules, communicating with the LiFePO<sub>4</sub> battery rather than receiving a voltage. To ensure the connections were properly labeled, the team communicated with LaniEV’s engineers about the matter. Following the conversation with LaniEV’s engineers, all terminals were deemed properly labeled.
+The multimeter displayed a positive voltage for the golf cart controller and MPPT, signifying each terminal was properly labeled. The test for the MPPT was conducted at the battery output terminals. The solar panel input terminals of the MPPT were prewired when given to the team. When checking the charger and display/power button, no voltage was read by the multimeter. This occurs due to the charger being a device that sends voltage rather than receiving. The display and power button follow similar rules, communicating with the LiFePO<sub>4</sub> battery rather than receiving a voltage. To ensure the connections were properly labeled, the team communicated with LaniEV’s engineers about the matter. Following the conversation with LaniEV’s engineers, all terminals were deemed properly labeled.
 
-The previously used multimeter was utilized again, to check for continuity to verify that each device was a closed loop. This indicates there is no short circuit, open circuit, or ground fault occurring in the wires or inside the device.
+The previously used multimeter was utilized again, to check for continuity to verify that each device was a closed loop. This indicates there is no short circuit, open circuit, or ground fault occurring in the wires or inside the device. Each test was conducted by touching the corresponding positive and negative probe to the terminals of the specified device to create the closed loop.
 
 | Device Name          | Resistance |
 |----------------------|------------|
@@ -26,14 +26,15 @@ The multimeter displayed an ohmage of zero for each device, indicating there was
 
 Section 9.1.3 of ANSI/OPEI Z130.1-2020 requires the system to have adequate wiring capacity for the expected load. The American Wire Gauge (AWG) is displayed on the insulation of the wire. If the information on the insulation is smudged or not visible, wire strippers can be used to determine the gauge of the wire. Using the AWG and an online conversion table, the rated amperage of each wire can be determined.
 
-| Device Name          | American Wire Gauge (AWG) | Rated Amperage |
-|----------------------|---------------------------|----------------|
-| Golf Cart Controller | 4 AWG                     | 70-85 A        |
-| Charger              | 18 AWG                    | 7 A            |
-| Display/Power Button | 16 AWG                    | 10 A           |
-| MPPT                 | 14 AWG                    | 15 A           |
+| Device Name           | American Wire Gauge (AWG) | Rated Amperage |
+|-----------------------|---------------------------|----------------|
+| Golf Cart Controller  | 4 AWG                     | 70-85 A        |
+| Charger - Wall Outlet | 14 AWG                    | 15 A           |
+| Charger – Battery     | 14AWG\*2C+20AWG\*4C       | 15 A and 5 A   |
+| Display/Power Button  | 16 AWG                    | 10 A           |
+| MPPT                  | 14 AWG                    | 15 A           |
 
-The maximum current drawn by the battery when the golf cart is in motion is approximately 21 amps. Therefore, the 4 AWG wires for the controller met our need. It can be replaced for a bigger gauge wire to reduce the needed space in the battery compartment if deemed necessary. The MPPT, charger, and display/power button wires fit the load of each device, matching the amperage that is supplied and used to communicate with the battery.
+The maximum current drawn by the battery when the golf cart is in motion is approximately 21 amps. Therefore, the 4 AWG wires for the controller met our need. It can be replaced for a bigger gauge wire to reduce the needed space in the battery compartment if deemed necessary. The connection between the charger and battery contains six total wires, two wires rated at 14 AWG and four wires rated at 20 AWG. The 14 AWG wires transport most of the voltage created by the charger, while the 20 AWG wires help control how much extra voltage gets carried to the battery. This combination allows for safe transportation of voltage between the two devices. The 14 AWG wire used for the wall outlet connection of the charger allows for the maximum amperage the device can handle, thus fitting the device’s requirements. The MPPT and display/power button wires fit the load of each device, matching the amperage that is supplied and used to communicate with the battery.
 
 Referencing the 2019 Precedent Golf Car Maintenance and Service Manual, there are two fuses found in the main harness electric schematic, one is rated for 2 amps and the other for 15 amps. The battery supplies the system with approximately 13 amps under normal load. The 2 amp fuse is connected to an output for a car extension. For our purposes, we do not intend to use a car extension. The 15 amp fuse is connected to the positive battery auxiliary output of the controller, which is responsible for protecting the internal electronics by removing the connection between the controller and key switch, should the fuse blow. Because the battery delivers an amperage of 13 amps, the 15 amp fuse will work for our intended purpose.
 
