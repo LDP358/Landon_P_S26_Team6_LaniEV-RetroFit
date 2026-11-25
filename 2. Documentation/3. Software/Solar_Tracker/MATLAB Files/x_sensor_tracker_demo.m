@@ -10,7 +10,7 @@ function x_sensor_tracker_demo()
 % The controller sees ONLY the four simulated sunlight sensor readings.
 %
 % Requires BASE MATLAB and x_sensor_core.m + tracker_config.m in folder.
-% v2.1: N/W actuators mounted on BOTH fixed and moving frame outer edge
+% v2.2: N/W actuators mounted on BOTH fixed and moving frame outer edge
 % midpoints; modeled compact actuators are virtual, not selected hardware.
 % This is a preliminary kinematic demonstration, not hardware validation.
 
@@ -41,7 +41,7 @@ initialAz=315;
 initialEl=82;
 st.sensor=x_sensor_core('sense',st.angles,initialAz,initialEl,cfg);
 
-fig=figure('Name','Solar Tracker | X-sensor, VIRTUAL edge-mounted actuators', ...
+fig=figure('Name','Solar Tracker 48 x 68 in | virtual edge-mounted actuators', ...
     'NumberTitle','off','Color',uiBg, ...
     'Position',[70 65 1330 820],'MenuBar','none', ...
     'ToolBar','figure','CloseRequestFcn',@closeDemo);
@@ -133,8 +133,8 @@ xlabel(ax3,'East / West (in)');
 ylabel(ax3,'North / South (in)');
 zlabel(ax3,'Height (in)');
 title(ax3,'Outer-rim N/W mounts | virtual actuators | S/E elbows');
-baseX=[-22 22 22 -22]*.0254;
-baseY=[-36 -36 36 36]*.0254;
+baseX=[-1 1 1 -1]*(cfg.panelEW/2);
+baseY=[-1 -1 1 1]*(cfg.panelNS/2);
 baseZ=zeros(1,4);
 patch(ax3,baseX/.0254,baseY/.0254,baseZ, ...
     [.63 .68 .75],'FaceAlpha',.08,'EdgeColor',[.37 .43 .50], ...
@@ -188,8 +188,8 @@ for j=1:4
     hDots(j)=plot3(ax3,nan,nan,nan,'o','MarkerFaceColor',[1 .8 .1], ...
         'MarkerEdgeColor',[.4 .3 0],'MarkerSize',6);
 end
-text(ax3,34,50,0,'N','FontWeight','bold');
-text(ax3,43,-36,0,'E','FontWeight','bold');
+text(ax3,30,cfg.panelNS/(2*.0254)+13,0,'N','FontWeight','bold');
+text(ax3,cfg.panelEW/(2*.0254)+19,-34,0,'E','FontWeight','bold');
 
 % ------------------------------------------------------------------
 % Top-right: actual geometry of diagonal walls and sensor patch colors.
@@ -197,16 +197,19 @@ text(ax3,43,-36,0,'E','FontWeight','bold');
 axSensor=axes('Parent',fig,'Units','normalized', ...
     'Position',[.672 .560 .288 .255]);
 hold(axSensor,'on'); axis(axSensor,'equal');
-axis(axSensor,[-.08 .08 -.117 .117]);
+axis(axSensor,[-.08 .08 -cfg.sensorBoardHeight/2-.02 cfg.sensorBoardHeight/2+.02]);
 set(axSensor,'XTick',[],'YTick',[],'Box','on');
 title(axSensor,'X-shaped sensor (top view)','Color',uiText,'FontWeight','bold');
-rectangle('Parent',axSensor,'Position',[-.06,-.098,.12,.196], ...
+rectangle('Parent',axSensor,'Position',[-cfg.sensorBoardWidth/2, ...
+    -cfg.sensorBoardHeight/2,cfg.sensorBoardWidth,cfg.sensorBoardHeight], ...
     'EdgeColor',[.2 .35 .6],'LineWidth',1.8);
 u1=[cfg.panelEW/2;cfg.panelNS/2];u1=u1/norm(u1);
 u2=[-cfg.panelEW/2;cfg.panelNS/2];u2=u2/norm(u2);
-plot(axSensor,[-u1(1),u1(1)]*.115,[-u1(2),u1(2)]*.115, ...
+plot(axSensor,[-u1(1),u1(1)]*cfg.sensorWallHalfLength, ...
+    [-u1(2),u1(2)]*cfg.sensorWallHalfLength, ...
     '-','LineWidth',6,'Color',[.21 .25 .31]);
-plot(axSensor,[-u2(1),u2(1)]*.115,[-u2(2),u2(2)]*.115, ...
+plot(axSensor,[-u2(1),u2(1)]*cfg.sensorWallHalfLength, ...
+    [-u2(2),u2(2)]*cfg.sensorWallHalfLength, ...
     '-','LineWidth',6,'Color',[.21 .25 .31]);
 centers=[0,cfg.sensorEastOffset,0,-cfg.sensorEastOffset; ...
          cfg.sensorNorthOffset,0,-cfg.sensorNorthOffset,0];
@@ -506,7 +509,12 @@ updateDisplay();
             'UData',normal(1)*30,'VData',normal(2)*30,'WData',normal(3)*30);
         set(hSun,'XData',cIn(1),'YData',cIn(2),'ZData',cIn(3), ...
             'UData',sun(1)*35,'VData',sun(2)*35,'WData',sun(3)*35);
-        diags=[[-.055;-.090],[.055;.090],[-.055;.090],[.055;-.090]];
+        sensorHalfX = cfg.sensorBoardWidth/2;
+        sensorHalfY = cfg.sensorBoardHeight/2;
+        diags=[[-sensorHalfX;-sensorHalfY], ...
+               [sensorHalfX;sensorHalfY], ...
+               [-sensorHalfX;sensorHalfY], ...
+               [sensorHalfX;-sensorHalfY]];
         % Exact wall bearing matches panel diagonals, visual length is scaled.
         for widx=1:2
             if widx==1, ab=diags(:,1:2);else,ab=diags(:,3:4);end
@@ -547,7 +555,7 @@ updateDisplay();
         ylim(axCurrent,[0,1.20*imax]);
         ylim(axHistory,[-1 1]);
         errNow=acosd(max(-1,min(1,dot(normal,sun))));
-        title(ax3,sprintf('Sun: %.0f deg az, %.0f deg elev | Panel error: %.1f deg', ...
+        title(ax3,sprintf('48 x 68 in panel | Sun: %.0f az, %.0f elev | Pointing error: %.1f deg', ...
             az,el,errNow),'Color',uiText,'FontWeight','bold');
         currentL=s.lengths/.0254;
         mode=s.mode;
