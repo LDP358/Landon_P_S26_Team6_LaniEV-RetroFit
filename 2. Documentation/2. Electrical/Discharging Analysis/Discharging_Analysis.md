@@ -19,7 +19,7 @@ The two approximate total load conditions were 260 lb and 515 lb. The reported t
 
 ### 2.2 Testing Procedure
 
-Testing was conducted on campus on November 21 and 22, 2026. The team selected an approximately 616-yard loop and drove the cart around the same route under different loads and solar panel connection conditions. For each run, the team recorded the starting battery SOC, driving time, number of laps completed, and ending battery SOC. Every run was recorded at intervals of 10 SOC percentage point.
+Testing was conducted on campus on November 21 and 22, 2026. The team selected an approximately 616-yard loop located around the tennis courts near the intersection of Stadium Drive and University Drive. The golf cart was driven along the same route under different load conditions, with the solar panel either connected or disconnected. For each run, the team recorded the starting battery state of charge (SOC) using the battery percentage indicator provided by Lani EV, the driving time using a stopwatch, the number of laps completed, and the ending battery SOC. Each run continued until the battery SOC decreased by 10 percentage points.
 
 The smaller load runs were recorded on November 21, and the larger load runs were recorded on November 22, giving a total of 12 runs.
 
